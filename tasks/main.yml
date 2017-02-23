@@ -1,0 +1,9 @@
+---
+#- include: install/main.yml
+- block:
+  - name: install RabbitMQ (RedHat)
+    include: install.redhat.yml
+    when: ansible_os_family == 'RedHat'
+    
+  when: rabbitmq_install_enabled
+  tags: rabbitmq_install

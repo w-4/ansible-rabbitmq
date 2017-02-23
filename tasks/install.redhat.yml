@@ -1,0 +1,12 @@
+---
+- name: install rabbitmq-server dependencies (RedHat)
+  yum: name="{{ item }}" state=present
+  with_items:
+    - erlang
+    - libselinux-python
+
+- name: install rabbitmq-server {{ rabbitmq_install_major }}.{{ rabbitmq_install_minor }}.{{ rabbitmq_install_patch }} (RedHat)
+  yum: name={{ rabbitmq_package_url }} state=present
+
+- name: enable rabbitmq-server to survive reboot
+  service: name=rabbitmq-server enabled=yes state=restarted
