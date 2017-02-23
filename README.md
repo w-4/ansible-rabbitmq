@@ -1,38 +1,46 @@
-Role Name
+RabbitMQ
 =========
 
-A brief description of the role goes here.
+Ansible role to install and configure RabbitMQ server.
 
-Requirements
+#### Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role requires the previous installation of the EPEL repositories. Alternatively you can use our role to install EPEL (ansible-buy4.repo-epel)
 
-Role Variables
+#### Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
 
-Dependencies
+rabbitmq_install_enabled: true
+
+rabbitmq_install_major: 3
+rabbitmq_install_minor: 3
+rabbitmq_install_patch: 5
+rabbitmq_install_release: 1
+rabbitmq_install_path: "{{ rabbitmq_install_major }}.{{ rabbitmq_install_minor }}.{{ rabbitmq_install_patch }}"
+rabbitmq_install_version: "{{ rabbitmq_install_major }}.{{ rabbitmq_install_minor }}.{{ rabbitmq_install_patch }}-{{ rabbitmq_install_release }}"
+rabbitmq_package_url: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ rabbitmq_install_path }}/rabbitmq-server-{{ rabbitmq_install_version }}.noarch.rpm
+
+```
+
+#### Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None yet.
 
-Example Playbook
+#### Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
+```yaml
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+        - buy4.repo-epel
+        - buy4.rabbitmq
+```
 
-License
+#### License
 -------
 
 BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
