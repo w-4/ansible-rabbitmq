@@ -1,4 +1,9 @@
 ---
+
+# Take the package given by the OS/distrib
+rabbitmq_os_package: false
+
+# Allways install RabbitMQ, unless it's already installed and you don't want it to be replaced
 rabbitmq_install_enabled: true
 
 rabbitmq_install_major: 3
