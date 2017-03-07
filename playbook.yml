@@ -1,0 +1,7 @@
+---
+- name: queue service
+  hosts: all
+  become: true
+  roles:
+    - { role: buy4.repo-epel, when: "ansible_os_family == 'RedHat'" }
+    - buy4.rabbitmq
