@@ -1,9 +1,18 @@
 ---
+ansible:
+  playbook: playbook.yml
+
 dependency:
   name: galaxy
+
 driver:
   name: vagrant
+
 vagrant:
+  instances:
+    - name: virtualmachine
+      ansible_groups:
+        - group1
   platforms:
     - name: centos-7.2
       box: bento/centos-7.2
@@ -13,9 +22,5 @@ vagrant:
       options:
         memory: 512
         cpus: 2
-  instances:
-    - name: virtualmachine
-      ansible_groups:
-        - group1
 verifier:
-  name: serverspec
+  name: testinfra

@@ -5,8 +5,11 @@
     - erlang
     - libselinux-python
 
-- name: install rabbitmq-server {{ rabbitmq_install_major }}.{{ rabbitmq_install_minor }}.{{ rabbitmq_install_patch }} (RedHat)
-  yum: name={{ rabbitmq_package_url }} state=present
+- name: install rabbitmq-server {{ rabbitmq_install_version }} (RedHat)
+  yum: name=rabbitmq-server-{{ rabbitmq_install_version }} state=present
 
 - name: enable rabbitmq-server to survive reboot
-  service: name=rabbitmq-server enabled=yes state=stopped
+  service:
+    name: rabbitmq-server
+    enabled: yes
+    state: stopped

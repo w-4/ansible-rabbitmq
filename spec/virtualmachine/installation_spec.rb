@@ -6,5 +6,5 @@ describe service('rabbitmq-server') do
 end
 
 describe package('rabbitmq-server') do
-  it { should be_installed.with_version('3.3.5') }
+  it { should be_installed.by('yum').with_version('3.3.5-31') }
 end
