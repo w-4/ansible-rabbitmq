@@ -19,3 +19,18 @@ def test_rabbitmq_running_and_enabled(Service):
     rabbitmq = Service("rabbitmq-server")
     assert rabbitmq.is_enabled
     assert rabbitmq.is_running
+
+
+def test_amqp_port_is_listening(Socket):
+    amqp_port = Socket("tcp://:::5672")
+    assert amqp_port.is_listening
+
+
+def test_tls_port_is_listening(Socket):
+    amqp_port = Socket("tcp://:::5671")
+    assert amqp_port.is_listening
+
+
+def test_menagement_port_is_listening(Socket):
+    amqp_port = Socket("tcp://0.0.0.0:15672")
+    assert amqp_port.is_listening

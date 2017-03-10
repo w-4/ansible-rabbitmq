@@ -9,3 +9,7 @@
     when: ansible_os_family == 'Debian'
   when: rabbitmq_install_enabled
   tags: rabbitmq_install
+
+- name: configure queue service
+  include: configuration.yml
+  tags: rabbitmq_configuration

@@ -6,8 +6,13 @@ rabbitmq_os_package: false
 # Allways install RabbitMQ, unless it's already installed and you don't want it to be replaced
 rabbitmq_install_enabled: true
 
+# Install specific RabbitMQ version, unless it's redefined
 rabbitmq_install_major: 3
 rabbitmq_install_minor: 3
 rabbitmq_install_patch: 5
 rabbitmq_install_release: "*"
 rabbitmq_install_version: "{{ rabbitmq_install_major }}.{{ rabbitmq_install_minor }}.{{ rabbitmq_install_patch }}-{{ rabbitmq_install_release }}"
+
+# TCP configuration
+rabbitmq_conf_tcp_listeners_address: ''
+rabbitmq_conf_tcp_listeners_port: 5672

@@ -1,0 +1,18 @@
+[
+  {rabbit, [
+    {% if rabbitmq_conf_tcp_listeners_address != '' %}
+    {tcp_listeners, [{"{{ rabbitmq_conf_tcp_listeners_address }}", {{ rabbitmq_conf_tcp_listeners_port }}}]}
+    {% else %}
+    {tcp_listeners, [{{ rabbitmq_conf_tcp_listeners_port }}]}
+    {% endif %}
+    %%{cluster_nodes, {[<lista_dos_nodes>], disc}}
+  ]},
+  {kernel, []},
+	{rabbitmq_management, []},
+	{rabbitmq_management_agent, []},
+	{rabbitmq_shovel, [{shovels,[]} ]},
+	{rabbitmq_stomp, []},
+	{rabbitmq_mqtt, []},
+	{rabbitmq_amqp1_0, []},
+	{rabbitmq_auth_backend_ldap, []}
+].
