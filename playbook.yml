@@ -3,4 +3,4 @@
   hosts: all
   become: true
   roles:
-    - buy4.rabbitmq
+    - role: buy4.rabbitmq

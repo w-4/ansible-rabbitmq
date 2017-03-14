@@ -3,9 +3,20 @@
 - name: copy the rabbitmq configuration file
   template:
     src=rabbitmq.config.j2
-    dest=/etc/rabbitmq/rabbitmq.config
-    owner=root
-    group=rabbitmq
-    mode=0644
+    dest={{ rabbitmq_config_file_path }}
+    owner={{ rabbitmq_config_file_owner }}
+    group={{ rabbitmq_config_file_group }}
+    mode={{ rabbitmq_config_file_mode }}
     backup=yes
   notify: rabbitmq restart
+
+- name: generate rabbitmq environment-variables file
+  template:
+    src=rabbitmq-env.conf.j2
+    dest={{ rabbitmq_env_variables_file_path }}
+    owner={{ rabbitmq_config_file_owner }}
+    group={{ rabbitmq_config_file_group }}
+    mode={{ rabbitmq_config_file_mode }}
+    backup=yes
+  notify: rabbitmq restart
+  when: rabbitmq_conf_env is defined

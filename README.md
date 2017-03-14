@@ -36,8 +36,16 @@ None yet.
 ```yaml
     - hosts: servers
       roles:
-        - buy4.repo-epel
         - buy4.rabbitmq
+```
+
+The specific RabbitMQ environment variables can also be given.
+
+```yaml
+    vars:
+      rabbitmq_conf_env:
+        RABBITMQ_NODE_IP_ADDRESS: "127.0.0.2"
+        RABBITMQ_NODENAME: "nodename"
 ```
 
 #### License

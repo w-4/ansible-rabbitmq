@@ -16,3 +16,10 @@ rabbitmq_install_version: "{{ rabbitmq_install_major }}.{{ rabbitmq_install_mino
 # TCP configuration
 rabbitmq_conf_tcp_listeners_address: ''
 rabbitmq_conf_tcp_listeners_port: 5672
+
+# RabbitMQ configuration
+rabbitmq_config_file_path: "/etc/rabbitmq/rabbitmq.config"
+rabbitmq_env_variables_file_path: "/etc/rabbitmq/rabbitmq-env.config"
+rabbitmq_config_file_owner: root
+rabbitmq_config_file_group: rabbitmq
+rabbitmq_config_file_mode: 0644
