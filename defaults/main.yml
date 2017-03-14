@@ -23,3 +23,9 @@ rabbitmq_env_variables_file_path: "/etc/rabbitmq/rabbitmq-env.config"
 rabbitmq_config_file_owner: root
 rabbitmq_config_file_group: rabbitmq
 rabbitmq_config_file_mode: 0644
+
+rabbitmq_users_remove:
+  - guest
+
+rabbitmq_users:
+  - rabbitmq

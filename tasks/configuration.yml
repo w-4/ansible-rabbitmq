@@ -20,3 +20,17 @@
     backup=yes
   notify: rabbitmq restart
   when: rabbitmq_conf_env is defined
+
+- meta: flush_handlers
+
+- name: ensure the users are removed
+  rabbitmq_user:
+    user={{ item }}
+    state=absent
+  with_items: "{{ rabbitmq_users_remove }}"
+
+- name: ensure users exist
+  rabbitmq_user:
+    user={{ item }}
+    state=present
+  with_items: "{{ rabbitmq_users }}"
