@@ -13,3 +13,7 @@
 - name: configure queue service
   include: configuration.yml
   tags: rabbitmq_configuration
+
+- name: install plugins
+  include: plugins.yml
+  tags: rabbitmq_plugins

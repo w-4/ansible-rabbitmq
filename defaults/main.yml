@@ -29,3 +29,10 @@ rabbitmq_users_remove:
 
 rabbitmq_users:
   - rabbitmq
+
+# RabbitMQ plugins
+rabbitmq_bin_path: "/usr/lib/rabbitmq/bin"
+rabbitmq_sbin_path: "/usr/lib/rabbitmq/sbin"
+rabbitmq_plugins_prefix_path: "/usr/lib/rabbitmq"
+rabbitmq_plugins:
+  - rabbitmq_management

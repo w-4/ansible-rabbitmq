@@ -1,0 +1,12 @@
+---
+
+- name: symlink rabbitmq bin to sbin
+  file:
+    src={{ rabbitmq_bin_path }}
+    dest={{ rabbitmq_sbin_path }}
+    state=link
+
+- name: enable plugins
+  rabbitmq_plugin:
+    names={{ rabbitmq_plugins | join(',') }}
+  notify: rabbitmq restart
