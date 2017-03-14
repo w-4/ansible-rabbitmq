@@ -28,7 +28,7 @@ def test_amqp_port_is_listening(Socket):
 
 def test_tls_port_is_listening(Socket):
     amqp_port = Socket("tcp://:::5671")
-    assert amqp_port.is_listening
+    assert not amqp_port.is_listening
 
 
 def test_menagement_port_is_listening(Socket):
