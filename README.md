@@ -13,15 +13,46 @@ This role requires the previous installation of the EPEL repositories. Alternati
 
 ```yaml
 
+# Take the package given by the OS/distrib
+rabbitmq_os_package: false
+
+# Allways install RabbitMQ, unless it's already installed and you don't want it to be replaced
 rabbitmq_install_enabled: true
 
+# Install specific RabbitMQ version, unless it's redefined
 rabbitmq_install_major: 3
 rabbitmq_install_minor: 3
 rabbitmq_install_patch: 5
-rabbitmq_install_release: 1
-rabbitmq_install_path: "{{ rabbitmq_install_major }}.{{ rabbitmq_install_minor }}.{{ rabbitmq_install_patch }}"
+rabbitmq_install_release: "*"
 rabbitmq_install_version: "{{ rabbitmq_install_major }}.{{ rabbitmq_install_minor }}.{{ rabbitmq_install_patch }}-{{ rabbitmq_install_release }}"
-rabbitmq_package_url: http://www.rabbitmq.com/releases/rabbitmq-server/v{{ rabbitmq_install_path }}/rabbitmq-server-{{ rabbitmq_install_version }}.noarch.rpm
+
+# TCP configuration
+rabbitmq_conf_tcp_listeners_address: ''
+rabbitmq_conf_tcp_listeners_port: 5672
+
+# RabbitMQ configuration
+rabbitmq_config_file_path: "/etc/rabbitmq/rabbitmq.config"
+rabbitmq_env_variables_file_path: "/etc/rabbitmq/rabbitmq-env.config"
+rabbitmq_config_file_owner: root
+rabbitmq_config_file_group: rabbitmq
+rabbitmq_config_file_mode: 0644
+
+rabbitmq_users_remove:
+  - guest
+
+rabbitmq_users:
+  - rabbitmq
+
+# RabbitMQ plugins
+rabbitmq_bin_path: "/usr/lib/rabbitmq/bin"
+rabbitmq_sbin_path: "/usr/lib/rabbitmq/sbin"
+rabbitmq_plugins_prefix_path: "/usr/lib/rabbitmq"
+rabbitmq_plugins:
+  - rabbitmq_management
+
+# RabbitMQ cluster
+rabbitmq_clustering_enabled: false
+rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
 
 ```
 
@@ -47,6 +78,12 @@ The specific RabbitMQ environment variables can also be given.
         RABBITMQ_NODE_IP_ADDRESS: "127.0.0.2"
         RABBITMQ_NODENAME: "nodename"
 ```
+
+#### Testing
+-------------
+
+This role was developed using [Molecule](https://molecule.readthedocs.io).
+The molecule.yml and the playbook.yml are on the root of this role.
 
 #### License
 -------

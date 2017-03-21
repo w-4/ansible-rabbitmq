@@ -40,4 +40,3 @@ rabbitmq_plugins:
 # RabbitMQ cluster
 rabbitmq_clustering_enabled: false
 rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
-rabbitmq_clustered_path: "/etc/rabbitmq/clustered"
