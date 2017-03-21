@@ -13,9 +13,25 @@ vagrant:
     - name: virtualmachine
       ansible_groups:
         - group1
+    - name: virtualmachine-clustered01
+      interfaces:
+        - network_name: private_network
+          type: static
+          ip: 172.28.128.3
+          auto_config: true
+      ansible_groups:
+        - group2
+    - name: virtualmachine-clustered02
+      interfaces:
+        - network_name: private_network
+          type: static
+          ip: 172.28.128.4
+          auto_config: true
+      ansible_groups:
+        - group2
   platforms:
-    - name: centos-7.2
-      box: bento/centos-7.2
+    - name: centos-7.3
+      box: bento/centos-7.3
   providers:
     - name: virtualbox
       type: virtualbox

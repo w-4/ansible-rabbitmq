@@ -1,6 +1,17 @@
 ---
-- name: queue service
-  hosts: all
+- name: queue service not clustered
+  hosts: group1
   become: true
   roles:
     - role: buy4.rabbitmq
+
+- include: tests/hosts.yml
+
+- name: queue service clustered
+  hosts: group2
+  become: true
+  roles:
+    - role: buy4.rabbitmq
+      rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
+      rabbitmq_clustering_enabled: true
+      rabbitmq_master_node: "virtualmachine-clustered01"

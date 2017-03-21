@@ -36,3 +36,8 @@ rabbitmq_sbin_path: "/usr/lib/rabbitmq/sbin"
 rabbitmq_plugins_prefix_path: "/usr/lib/rabbitmq"
 rabbitmq_plugins:
   - rabbitmq_management
+
+# RabbitMQ cluster
+rabbitmq_clustering_enabled: false
+rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
+rabbitmq_clustered_path: "/etc/rabbitmq/clustered"

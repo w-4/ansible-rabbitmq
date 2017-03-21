@@ -4,3 +4,8 @@
   service:
     name: rabbitmq-server
     state: restarted
+
+- name: rabbitmq stop
+  service:
+    name: rabbitmq-server
+    state: stopped
