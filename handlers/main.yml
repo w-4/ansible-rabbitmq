@@ -9,3 +9,6 @@
   service:
     name: rabbitmq-server
     state: stopped
+
+- name: start rabbitmq app
+  command: rabbitmqctl start_app

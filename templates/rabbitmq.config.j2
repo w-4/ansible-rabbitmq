@@ -1,5 +1,6 @@
 [
   {rabbit, [
+    {loopback_users, []},
     {% if rabbitmq_conf_tcp_listeners_address != '' %}
     {tcp_listeners, [{"{{ rabbitmq_conf_tcp_listeners_address }}", {{ rabbitmq_conf_tcp_listeners_port }}}]}
     {% else %}

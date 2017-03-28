@@ -89,3 +89,7 @@ The molecule.yml and the playbook.yml are on the root of this role.
 -------
 
 BSD
+
+#### To Do
+-------------
+  - Set specific permissions and priviledges to specific users
