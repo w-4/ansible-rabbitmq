@@ -93,3 +93,8 @@ BSD
 #### To Do
 -------------
   - Set specific permissions and priviledges to specific users
+  - Install latest version when a version number is not given
+  - Add tests for the conection/read/write of rabbit's queues
+  - Test removing flush_handlers from clustering step
+  - Bug: when the master is down and the clustering step is run all the other nodes will go down.
+  - App start with service start
