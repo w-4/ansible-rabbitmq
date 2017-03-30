@@ -5,10 +5,5 @@
     name: rabbitmq-server
     state: restarted
 
-- name: rabbitmq stop
-  service:
-    name: rabbitmq-server
-    state: stopped
-
 - name: start rabbitmq app
   command: rabbitmqctl start_app

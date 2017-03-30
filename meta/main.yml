@@ -1,37 +1,14 @@
 galaxy_info:
-  author: your name
-  description: your description
-  company: your company (optional)
+  author: Carlos Martins
+  description: Role for installing RabbitMQ server
+  company: Buy4 Processamento de Pagamentos S.A.
 
-  # If the issue tracker for your role is not on github, uncomment the
-  # next line and provide a value
-  # issue_tracker_url: http://example.com/issue/tracker
-
-  # Some suggested licenses:
-  # - BSD (default)
-  # - MIT
-  # - GPLv2
-  # - GPLv3
-  # - Apache
-  # - CC-BY
   license: license (GPLv2, CC-BY, etc)
 
-  min_ansible_version: 1.2
+  min_ansible_version: 2.0.0
 
-  # Optionally specify the branch Galaxy will use when accessing the GitHub
-  # repo for this role. During role install, if no tags are available,
-  # Galaxy will use this branch. During import Galaxy will access files on
-  # this branch. If travis integration is cofigured, only notification for this
-  # branch will be accepted. Otherwise, in all cases, the repo's default branch
-  # (usually master) will be used.
-  #github_branch:
+  platforms:
 
-  #
-  # Below are all platforms currently available. Just uncomment
-  # the ones that apply to your role. If you don't see your
-  # platform on this list, let us know and we'll get it added!
-  #
-  #platforms:
   #- name: OpenBSD
   #  versions:
   #  - all
@@ -142,11 +119,11 @@ galaxy_info:
   #  - wily
   #  - xenial
   #  - yakkety
-  #- name: Debian
-  #  versions:
+    - name: Debian
+      versions:
   #  - all
   #  - etch
-  #  - jessie
+        - jessie
   #  - lenny
   #  - sid
   #  - squeeze
@@ -156,12 +133,12 @@ galaxy_info:
   #  versions:
   #  - all
   #  - any
-  #- name: EL
-  #  versions:
+    - name: EL
+      versions:
   #  - all
   #  - 5
   #  - 6
-  #  - 7
+        - 7
   #- name: Windows
   #  versions:
   #  - all
