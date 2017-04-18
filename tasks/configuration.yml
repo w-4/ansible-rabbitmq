@@ -1,9 +1,4 @@
 ---
-- name: check if enabled_plugins file exists
-  stat:
-    path={{ rabbitmq_enabled_plugins_file_path }}
-  register: file_stat
-
 - name: change enabled_plugins file permissions
   file:
     state=touch
@@ -11,7 +6,7 @@
     owner={{ rabbitmq_enabled_plugins_file_owner }}
     group={{ rabbitmq_enabled_plugins_file_group }}
     mode={{ rabbitmq_enabled_plugins_file_mode }}
-  when: not file_stat.stat.exists
+  changed_when: false
 
 - name: copy the rabbitmq configuration file
   template:
