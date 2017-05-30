@@ -6,6 +6,7 @@ Ansible role to install and configure RabbitMQ server.
 #### Requirements
 ------------
 Before using this role make sure that the machines that will compose the cluster connect to each other - via ping or name resolution. Also make sure that they can connect to the Internet to download RabbitMQ package.
+
 For RehHat machines make sure the machines are subscribed. Also, this role requires the previous installation of the EPEL repositories. Alternatively you can use our role to install EPEL ([ansible-buy4.repo-epel)](https://bitbucket.org/stonepayments/ansible-buy4.epel)
 
 #### Role Variables
