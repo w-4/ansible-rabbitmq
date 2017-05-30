@@ -3,11 +3,28 @@ RabbitMQ
 
 Ansible role to install and configure RabbitMQ server.
 
+#### Note
+
+A good practice is to have, before running using this, clear knowledge of what are the plugins you're going to need. By default, this role enables the management plugin, here is a example of playbook that enables more plugins.
+
+```yaml
+---
+- name: queue service
+  hosts: your_hosts
+  become: true
+  roles:
+    - role: buy4.rabbitmq
+      rabbitmq_plugins:
+        - rabbitmq_management
+        - rabbitmq_shovel
+        - rabbitmq_shovel_management
+```
+
 #### Requirements
 ------------
 Before using this role make sure that the machines that will compose the cluster connect to each other - via ping or name resolution. Also make sure that they can connect to the Internet to download RabbitMQ package.
 
-For RehHat machines make sure the machines are subscribed. Also, this role requires the previous installation of the EPEL repositories. Alternatively you can use our role to install EPEL ([ansible-buy4.repo-epel)](https://bitbucket.org/stonepayments/ansible-buy4.epel)
+For RehHat machines make sure the machines are subscribed. Also, this role requires the previous installation of the EPEL repositories. Alternatively you can use our role to install EPEL ([ansible-buy4.repo-epel)](https://bitbucket.org/stonepayments/ansible-buy4.epel).
 
 #### Role Variables
 --------------
