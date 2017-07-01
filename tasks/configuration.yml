@@ -16,7 +16,6 @@
     group={{ rabbitmq_config_file_group }}
     mode={{ rabbitmq_config_file_mode }}
     backup=yes
-  notify: rabbitmq restart
 
 - name: generate rabbitmq environment-variables file
   template:
@@ -26,16 +25,12 @@
     group={{ rabbitmq_config_file_group }}
     mode={{ rabbitmq_config_file_mode }}
     backup=yes
-  notify: rabbitmq restart
   when: rabbitmq_conf_env is defined
-
-- meta: flush_handlers
 
 - name: ensure rabbitmq server is running
   service:
     name: rabbitmq-server
     state: started
-  notify: start rabbitmq app
 
 - name: ensure the users are removed
   rabbitmq_user:
