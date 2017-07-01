@@ -17,5 +17,4 @@ def test_rabbitmq_sbin_is_present(File):
 
 def test_rabbitmq_management_plugin_is_enable(Command):
     list_plugins_command = Command("sudo rabbitmq-plugins list -E -m")
-    list_plugins_command.rc
     assert list_plugins_command.stdout == 'rabbitmq_management'

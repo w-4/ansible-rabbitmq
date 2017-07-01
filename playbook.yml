@@ -3,7 +3,7 @@
   hosts: group1
   become: true
   roles:
-    - role: buy4.rabbitmq
+    - role: ansible-rabbitmq
 
 - include: tests/hosts.yml
 
@@ -11,7 +11,7 @@
   hosts: group2
   become: true
   roles:
-    - role: buy4.rabbitmq
+    - role: ansible-rabbitmq
       rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
       rabbitmq_clustering_enabled: true
       rabbitmq_master_node: "virtualmachine-clustered01"
