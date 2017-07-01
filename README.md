@@ -106,7 +106,7 @@ The molecule.yml and the playbook.yml are on the root of this role.
 #### License
 -------
 
-BSD
+MIT
 
 #### To Do
 -------------
