@@ -3,9 +3,10 @@ RabbitMQ
 
 Ansible role to install and configure RabbitMQ server.
 
-#### Note
+## Note
 
-A good practice is to have, before using this, clear knowledge of what are the plugins you're going to need. By default, this role enables the management plugin, here is a example of playbook that enables more plugins.
+A good practice is to have, before using this, clear knowledge of what are the plugins you're going to need. By
+default, this role enables the management plugin, here is a example of a playbook that enables more plugins.
 
 ```yaml
 ---
@@ -13,20 +14,23 @@ A good practice is to have, before using this, clear knowledge of what are the p
   hosts: your_hosts
   become: true
   roles:
-    - role: buy4.rabbitmq
+    - role: stone-payments.rabbitmq
       rabbitmq_plugins:
         - rabbitmq_management
         - rabbitmq_shovel
         - rabbitmq_shovel_management
 ```
 
-#### Requirements
+## Requirements
 ------------
-Before using this role make sure that the machines that will compose the cluster connect to each other - via ping or name resolution. Also make sure that they can connect to the Internet to download RabbitMQ package.
+Before using this role make sure that the machines that will compose the cluster connect to each other - via ping or
+name resolution. Also make sure that they can connect to the Internet to download RabbitMQ package.
 
-For RehHat machines make sure the machines are subscribed. Also, this role requires the previous installation of the EPEL repositories. Alternatively you can use our role to install EPEL ([ansible-buy4.epel)](https://bitbucket.org/stonepayments/ansible-buy4.epel).
+For RedHat machines make sure the machines are subscribed. Also, this role requires the previous installation of the
+EPEL repositories. Alternatively, you can use our role
+[stone-payments.epel](https://github.com/stone-payments/ansible-epel) to install EPEL.
 
-#### Role Variables
+## Role Variables
 --------------
 
 ```yaml
@@ -74,18 +78,18 @@ rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
 
 ```
 
-#### Dependencies
+## Dependencies
 ------------
 
 None yet.
 
-#### Example Playbook
+## Example Playbook
 ----------------
 
 ```yaml
     - hosts: servers
       roles:
-        - buy4.rabbitmq
+        - stone-payments.rabbitmq
 ```
 
 The specific RabbitMQ environment variables can also be given.
@@ -97,18 +101,18 @@ The specific RabbitMQ environment variables can also be given.
         RABBITMQ_NODENAME: "nodename"
 ```
 
-#### Testing
+## Testing
 -------------
 
-This role was developed using [Molecule](https://molecule.readthedocs.io).
-The molecule.yml and the playbook.yml are on the root of this role.
+This role was developed using [Molecule](https://molecule.readthedocs.io). The `molecule.yml` and the `playbook.yml`
+for testing are on the root of this role.
 
-#### License
+## License
 -------
 
 MIT
 
-#### To Do
+## To Do
 -------------
   - Set specific permissions and priviledges to specific users
   - Install latest version when a version number is not given
