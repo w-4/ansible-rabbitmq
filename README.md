@@ -101,6 +101,26 @@ The specific RabbitMQ environment variables can also be given.
         RABBITMQ_NODENAME: "nodename"
 ```
 
+To create a cluster you just have to run this role against the target nodes and
+give some extra vars.
+
+```yaml
+- name: queue service clustered
+  hosts: group2
+  become: true
+  roles:
+    - role: ansible-rabbitmq
+      rabbitmq_erlang_cookie: <your_cookie>
+      rabbitmq_clustering_enabled: true
+      rabbitmq_master_node: "your_master_node"
+```
+
+Notice that the cookie is hash string that can be of any size. A good practice is
+use a hash of 20 characters. This is the syncronization cookie used by erlang to
+create the cluster.
+
+Use this [playbook](playbook.yml) as a practical example.
+
 ## Testing
 -------------
 
