@@ -5,11 +5,6 @@
   changed_when: False
 
 - block:
-  - name: stop rabbitmq server
-    service:
-      name: rabbitmq-server
-      state: stopped
-
   - name: copy erlang cookie
     template:
       src: erlang.cookie.j2
@@ -19,25 +14,23 @@
       mode: 0400
       backup: yes
 
-  - name: start rabbitmq server
+  - name: restart rabbitmq server
     service:
       name: rabbitmq-server
-      state: started
+      state: restarted
 
   - name: stop rabbitmq app
     command: rabbitmqctl stop_app
-    when: inventory_hostname != "{{ rabbitmq_master_node }}"
+    when: "{{ inventory_hostname != rabbitmq_master_node }}"
 
   - name: join rabbitmq cluster
     command: rabbitmqctl join_cluster "rabbit@{{ rabbitmq_master_node }}"
     register: cluster_joined
-    when: inventory_hostname != "{{ rabbitmq_master_node }}"
-
-  - meta: flush_handlers
+    when: "{{ inventory_hostname != rabbitmq_master_node }}"
 
   - name: start rabbitmq app
     command: rabbitmqctl start_app
-    when: inventory_hostname != "{{ rabbitmq_master_node }}"
+    when: "{{ inventory_hostname != rabbitmq_master_node }}"
 
   when:
     - rabbitmq_clustering_enabled

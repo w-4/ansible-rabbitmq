@@ -31,6 +31,6 @@ def test_tls_port_is_listening(Socket):
     assert not amqp_port.is_listening
 
 
-def test_menagement_port_is_listening(Socket):
+def test_management_port_is_listening(Socket):
     amqp_port = Socket("tcp://0.0.0.0:15672")
     assert amqp_port.is_listening

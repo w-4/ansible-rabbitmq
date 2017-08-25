@@ -30,7 +30,8 @@ rabbitmq_config_file_group: rabbitmq
 rabbitmq_config_file_mode: 0644
 
 # RabbitMQ users
-rabbitmq_users_remove: []
+rabbitmq_users_remove:
+  - guest
 
 rabbitmq_users:
   - rabbitmq
