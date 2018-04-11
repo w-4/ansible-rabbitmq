@@ -140,3 +140,5 @@ MIT
   - Test removing flush_handlers from clustering step
   - Bug: when the master is down and the clustering step is run all the other nodes will go down.
   - App start with service start
+  - Update Ansible
+  - Update Molecule
