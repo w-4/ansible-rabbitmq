@@ -1,0 +1,49 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+lint:
+  name: yamllint
+  options:
+    config-file: yamllint-config.yaml
+platforms:
+  - name: clustered-01
+    box: centos/7
+    provider_name: virtualbox
+    provider_memory: 512
+    provider_cpus: 1
+    ansible_groups:
+        - group2
+    interfaces:
+      - network_name: private_network
+        type: static
+        ip: 1.2.3.4
+        auto_config: true
+  - name: clustered-02
+    box: centos/7
+    provider_name: virtualbox
+    provider_memory: 512
+    provider_cpus: 1
+    ansible_groups:
+        - group2
+    interfaces:
+      - network_name: private_network
+        type: static
+        ip: 1.2.3.5
+        auto_config: true
+provisioner:
+  name: ansible
+  playbooks:
+    converge: playbook.yml
+  lint:
+    name: ansible-lint
+scenario:
+  name: clustered
+verifier:
+  name: testinfra
+  directory: ../../tests
+  lint:
+    name: flake8

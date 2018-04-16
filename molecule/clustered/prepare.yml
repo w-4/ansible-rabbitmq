@@ -7,3 +7,10 @@
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
       become: true
       changed_when: false
+
+    - name: install epel-release
+      become: true
+      become_user: root
+      yum:
+        name: epel-release
+        state: present

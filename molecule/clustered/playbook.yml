@@ -1,22 +1,11 @@
 ---
-- name: Converge
-  hosts: all
-  roles:
-    - role: .
+- include: tests/hosts.yml
 
-# - name: clustered
-#       interfaces:
-#         - network_name: private_network
-#           type: static
-#           ip: 172.28.128.3
-#           auto_config: true
-#       ansible_groups:
-#         - group2
-#     - name: virtualmachine-clustered02
-#       interfaces:
-#         - network_name: private_network
-#           type: static
-#           ip: 172.28.128.4
-#           auto_config: true
-#       ansible_groups:
-#         - group2
+- name: queue service clustered
+  hosts: all
+  become: true
+  roles:
+    - role: ansible-rabbitmq
+      rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
+      rabbitmq_clustering_enabled: true
+      rabbitmq_master_node: "clustered-01"

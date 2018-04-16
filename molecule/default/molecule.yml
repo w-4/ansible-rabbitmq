@@ -13,11 +13,12 @@ lint:
     config-file: yamllint-config.yaml
 platforms:
   - name: non-clustered
-    instance_name: rmq-nonclustered
     box: centos/7
     provider_name: virtualbox
     provider_memory: 512
     provider_cpus: 1
+    ansible_groups:
+        - group1
 provisioner:
   name: ansible
   playbooks:
