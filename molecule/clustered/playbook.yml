@@ -1,0 +1,22 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: .
+
+# - name: clustered
+#       interfaces:
+#         - network_name: private_network
+#           type: static
+#           ip: 172.28.128.3
+#           auto_config: true
+#       ansible_groups:
+#         - group2
+#     - name: virtualmachine-clustered02
+#       interfaces:
+#         - network_name: private_network
+#           type: static
+#           ip: 172.28.128.4
+#           auto_config: true
+#       ansible_groups:
+#         - group2

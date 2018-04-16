@@ -1,9 +1,4 @@
 ---
-- name: queue service not clustered
-  hosts: group1
-  become: true
-  roles:
-    - role: ansible-rabbitmq
 
 - include: tests/hosts.yml
 

@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: Carlos Martins
   description: Role for installing RabbitMQ server
@@ -15,4 +16,4 @@ galaxy_info:
         - 7
   galaxy_tags: []
 
-dependencies: [ "" ]
+dependencies: []
