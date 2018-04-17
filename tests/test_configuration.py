@@ -1,7 +1,7 @@
-import testinfra.utils.ansible_runner
+# import testinfra.utils.ansible_runner
 
-testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-    '.molecule/ansible_inventory').get_hosts('all')
+# testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
+#    '.molecule/ansible_inventory').get_hosts('all')
 
 
 def test_rabbitmq_config_file_permissions_must_be_644(File):

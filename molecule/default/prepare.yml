@@ -13,3 +13,10 @@
       yum:
         name: epel-release
         state: present
+
+    - name: install netstat (required by testinfra)
+      become: true
+      become_user: root
+      yum:
+        name: net-tools
+        state: present

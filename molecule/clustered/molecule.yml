@@ -44,6 +44,8 @@ scenario:
   name: clustered
 verifier:
   name: testinfra
-  directory: ../../tests
+  directory: tests
+  additional_files_or_dirs : 
+    - ../../tests/test_*.py
   lint:
     name: flake8

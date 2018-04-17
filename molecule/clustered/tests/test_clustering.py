@@ -1,7 +1,7 @@
-import testinfra.utils.ansible_runner
+# import testinfra.utils.ansible_runner
 
-testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-    '.molecule/ansible_inventory').get_hosts('group2')
+# testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
+#    '.molecule/ansible_inventory').get_hosts('group2')
 
 
 def test_rabbitmq_erlang_cookie_is_present(File, Sudo):
