@@ -7,7 +7,7 @@
 def test_rabbitmq_is_installed(Package):
     rabbitmq = Package("rabbitmq-server")
     assert rabbitmq.is_installed
-    assert rabbitmq.version.startswith("3.3.5")
+    assert rabbitmq.version.startswith("3.6.9")
 
 
 def test_earlang_is_installed(Package):

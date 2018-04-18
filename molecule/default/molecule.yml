@@ -29,6 +29,6 @@ scenatio:
   name: default
 verifier:
   name: testinfra
-  directory: ../../tests
+  directory: ../../tests/default
   lint:
     name: flake8
