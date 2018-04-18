@@ -38,32 +38,41 @@ EPEL repositories. Alternatively, you can use our role
 # Take the package given by the OS/distrib
 rabbitmq_os_package: false
 
-# Allways install RabbitMQ, unless it's already installed and you don't want it to be replaced
+# Allways install RabbitMQ, 
+# unless it's already installed and you don't want it to be replaced
 rabbitmq_install_enabled: true
 
 # Install specific RabbitMQ version, unless it's redefined
-rabbitmq_install_major: 3
-rabbitmq_install_minor: 3
-rabbitmq_install_patch: 5
-rabbitmq_install_release: "*"
-rabbitmq_install_version: "{{ rabbitmq_install_major }}.{{ rabbitmq_install_minor }}.{{ rabbitmq_install_patch }}-{{ rabbitmq_install_release }}"
+rabbitmq_major: 3
+rabbitmq_minor: 7
+rabbitmq_patch: 4
+rabbitmq_release: "*"
+rabbitmq_version: "{{rabbitmq_major}}.{{rabbitmq_minor}}.{{rabbitmq_patch}}"
 
 # TCP configuration
 rabbitmq_conf_tcp_listeners_address: ''
 rabbitmq_conf_tcp_listeners_port: 5672
 
 # RabbitMQ configuration
+rabbitmq_enabled_plugins_file_path: "/etc/rabbitmq/enabled_plugins"
+rabbitmq_enabled_plugins_file_owner: root
+rabbitmq_enabled_plugins_file_group: rabbitmq
+rabbitmq_enabled_plugins_file_mode: 0644
+
 rabbitmq_config_file_path: "/etc/rabbitmq/rabbitmq.config"
 rabbitmq_env_variables_file_path: "/etc/rabbitmq/rabbitmq-env.config"
 rabbitmq_config_file_owner: root
 rabbitmq_config_file_group: rabbitmq
 rabbitmq_config_file_mode: 0644
 
+# RabbitMQ users
 rabbitmq_users_remove:
   - guest
 
 rabbitmq_users:
   - rabbitmq
+
+rabbitmq_administrator_tag: administrator
 
 # RabbitMQ plugins
 rabbitmq_bin_path: "/usr/lib/rabbitmq/bin"
@@ -91,8 +100,18 @@ None yet.
       roles:
         - stone-payments.rabbitmq
 ```
+By default this role will install the currently last upstream version of RabbitMQ (which is 3.7.4). If you want to install any other version you must give the version numbers.
 
-The specific RabbitMQ environment variables can also be given.
+```yaml
+    - hosts: servers
+      roles:
+        - role: stone-payments.rabbitmq
+          rabbitmq_major: 3
+          rabbitmq_minor: 6
+          rabbitmq_patch: 9
+```
+
+Specific RabbitMQ environment variables can also be given.
 
 ```yaml
     vars:
@@ -109,7 +128,7 @@ give some extra vars.
   hosts: group2
   become: true
   roles:
-    - role: ansible-rabbitmq
+    - role: stone-payments.rabbitmq
       rabbitmq_erlang_cookie: <your_cookie>
       rabbitmq_clustering_enabled: true
       rabbitmq_master_node: "your_master_node"
@@ -135,10 +154,7 @@ MIT
 ## To Do
 -------------
   - Set specific permissions and priviledges to specific users
-  - Install latest version when a version number is not given
   - Add tests for the conection/read/write of rabbit's queues
   - Test removing flush_handlers from clustering step
   - Bug: when the master is down and the clustering step is run all the other nodes will go down.
   - App start with service start
-  - Update Ansible
-  - Update Molecule
