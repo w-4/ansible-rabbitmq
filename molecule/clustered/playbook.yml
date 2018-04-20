@@ -1,12 +1,11 @@
 ---
-
 - include: tests/hosts.yml
 
 - name: queue service clustered
-  hosts: group2
+  hosts: all
   become: true
   roles:
     - role: ansible-rabbitmq
       rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
       rabbitmq_clustering_enabled: true
-      rabbitmq_master_node: "virtualmachine-clustered01"
+      rabbitmq_master_node: "clustered-01"
