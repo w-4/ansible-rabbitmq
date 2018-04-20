@@ -1,5 +1,5 @@
 ---
-- include: ../../tests/hosts.yml
+- include: tests/hosts.yml
 
 - name: queue service clustered
   hosts: all
