@@ -1,5 +1,5 @@
 ---
-- include: tests/hosts.yml
+- include: ../../tests/hosts.yml
 
 - name: queue service clustered
   hosts: all
@@ -9,3 +9,6 @@
       rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
       rabbitmq_clustering_enabled: true
       rabbitmq_master_node: "clustered-01"
+      rabbitmq_major: 3
+      rabbitmq_minor: 6
+      rabbitmq_patch: 9

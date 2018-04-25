@@ -9,10 +9,10 @@ rabbitmq_install_enabled: true
 
 # Install specific RabbitMQ version, unless it's redefined
 rabbitmq_major: 3
-rabbitmq_minor: 3
-rabbitmq_patch: 5
+rabbitmq_minor: 7
+rabbitmq_patch: 4
 rabbitmq_release: "*"
-rabbitmq_version: "{{rabbitmq_major}}.{{rabbitmq_minor}}.{{rabbitmq_patch}}-{{rabbitmq_release}}"
+rabbitmq_version: "{{rabbitmq_major}}.{{rabbitmq_minor}}.{{rabbitmq_patch}}"
 
 # TCP configuration
 rabbitmq_conf_tcp_listeners_address: ''
@@ -45,6 +45,8 @@ rabbitmq_sbin_path: "/usr/lib/rabbitmq/sbin"
 rabbitmq_plugins_prefix_path: "/usr/lib/rabbitmq"
 rabbitmq_plugins:
   - rabbitmq_management
+  - rabbitmq_shovel
+  - rabbitmq_shovel_management
 
 # RabbitMQ cluster
 rabbitmq_clustering_enabled: false

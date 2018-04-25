@@ -5,3 +5,6 @@
   become_user: root
   roles:
     - role: ansible-rabbitmq
+      rabbitmq_major: 3
+      rabbitmq_minor: 6
+      rabbitmq_patch: 9

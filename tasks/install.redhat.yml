@@ -2,11 +2,30 @@
 - name: install rabbitmq-server dependencies (RedHat)
   yum: name="{{ item }}" state=present
   with_items:
-    - erlang
     - libselinux-python
 
+- name: add erlang rpm key
+  rpm_key:
+    key: https://packages.erlang-solutions.com/rpm/erlang_solutions.asc
+    state: present
+
+- name: copy erlang repository
+  copy:
+    src: erlang.repo
+    dest: /etc/yum.repos.d/
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install erlang
+  yum:
+    name: erlang
+    state: present
+
 - name: install rabbitmq-server {{ rabbitmq_version }} (RedHat)
-  yum: name=rabbitmq-server-{{ rabbitmq_version }} state=present
+  yum:
+    name: "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/{{ rabbitmq_version }}/rabbitmq-server-{{ rabbitmq_version }}-1.el7.noarch.rpm"
+    state: present
 
 - name: enable rabbitmq-server to survive reboot
   service:
