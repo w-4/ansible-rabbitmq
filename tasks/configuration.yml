@@ -9,7 +9,7 @@
   changed_when: false
 
 - name: Check if rabbitmq_conf_vm_memory_high_watermark is under the recommended range
-  fail: 
+  fail:
     msg: "The recommended vm_memory_high_watermark range is 0.4 to 0.66."
   when: rabbitmq_conf_vm_memory_high_watermark < 0.4 or rabbitmq_conf_vm_memory_high_watermark > 0.66
 
@@ -32,9 +32,29 @@
     backup=yes
   when: rabbitmq_conf_env is defined
 
+- name: alter number of system's open file if rabbitmq_system_number_open_files is set
+  block:
+    - name: check if value is under 500k
+      fail:
+        msg: "The number of open files in the system should not exceed 500K."
+      when: rabbitmq_system_number_open_files > 500000
+
+    - name: make sure service.d exists
+      file:
+        path: "{{ rabbitmq_service_d_path }}"
+        state: directory
+
+    - name: change limit of system's number of open file
+      template:
+        src: limits.conf.j2
+        dest: "{{ rabbitmq_service_d_path }}/limits.conf"
+        backup: true
+  when: rabbitmq_system_number_open_files is defined
+
 - name: ensure rabbitmq server is running
   service:
     name: rabbitmq-server
+    daemon_reload: true #changed systemd conf file
     state: started
 
 - name: ensure the users are removed

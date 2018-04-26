@@ -34,6 +34,10 @@ rabbitmq_config_file_mode: 0644
 rabbitmq_conf_disk_free_limit_mem_relative: 1.5
 rabbitmq_conf_vm_memory_high_watermark: 0.4
 
+# system number of open files
+rabbitmq_service_d_path: /etc/systemd/system/rabbitmq-server.service.d
+rabbitmq_system_number_open_files: 50000
+
 # RabbitMQ users
 rabbitmq_users_remove:
   - guest
