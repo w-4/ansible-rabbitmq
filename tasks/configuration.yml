@@ -8,6 +8,11 @@
     mode={{ rabbitmq_enabled_plugins_file_mode }}
   changed_when: false
 
+- name: Check if rabbitmq_conf_vm_memory_high_watermark is under the recommended range
+  fail: 
+    msg: "The recommended vm_memory_high_watermark range is 0.4 to 0.66."
+  when: rabbitmq_conf_vm_memory_high_watermark < 0.4 or rabbitmq_conf_vm_memory_high_watermark > 0.66
+
 - name: copy the rabbitmq configuration file
   template:
     src=rabbitmq.config.j2
