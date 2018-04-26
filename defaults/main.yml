@@ -30,6 +30,10 @@ rabbitmq_config_file_owner: root
 rabbitmq_config_file_group: rabbitmq
 rabbitmq_config_file_mode: 0644
 
+# Variables can be overriden to adapt to the user case
+rabbitmq_conf_disk_free_limit_mem_relative: 1.5
+rabbitmq_conf_vm_memory_high_watermark: 0.4
+
 # RabbitMQ users
 rabbitmq_users_remove:
   - guest

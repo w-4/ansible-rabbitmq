@@ -1,6 +1,8 @@
 [
   {rabbit, [
     {loopback_users, []},
+    {disk_free_limit, {mem_relative, {{ rabbitmq_conf_disk_free_limit_mem_relative }}}},
+    {vm_memory_high_watermark, {{ rabbitmq_conf_vm_memory_high_watermark }}},
     {% if rabbitmq_conf_tcp_listeners_address != '' %}
     {tcp_listeners, [{"{{ rabbitmq_conf_tcp_listeners_address }}", {{ rabbitmq_conf_tcp_listeners_port }}}]}
     {% else %}
