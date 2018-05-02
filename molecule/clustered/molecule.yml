@@ -22,6 +22,8 @@ platforms:
         type: static
         ip: 1.2.3.4
         auto_config: true
+    instance_raw_config_args:
+      - "vm.network 'forwarded_port', guest: 15672, host: 15672"
   - name: clustered-02
     box: centos/7
     provider_name: virtualbox
