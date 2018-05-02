@@ -69,6 +69,10 @@ rabbitmq_config_file_mode: 0644
 rabbitmq_conf_disk_free_limit_mem_relative: 1.5
 rabbitmq_conf_vm_memory_high_watermark: 0.4 
 
+# system number of open files
+rabbitmq_service_d_path: /etc/systemd/system/rabbitmq-server.service.d
+rabbitmq_system_number_open_files: 50000
+
 # RabbitMQ users
 rabbitmq_users_remove:
   - guest
@@ -122,6 +126,18 @@ Specific RabbitMQ environment variables can also be given.
       rabbitmq_conf_env:
         RABBITMQ_NODE_IP_ADDRESS: "127.0.0.2"
         RABBITMQ_NODENAME: "nodename"
+```
+
+You can alter: 
+* Memory watermark (`rabbitmq_conf_disk_free_limit_mem_relative`);
+* Free disk space limit (`rabbitmq_conf_vm_memory_high_watermark`);
+* Number of system's open files (`rabbitmq_system_number_open_files`). 
+
+```yaml
+    vars:
+      rabbitmq_conf_disk_free_limit_mem_relative: 1.5
+      rabbitmq_conf_vm_memory_high_watermark: 0.4
+      rabbitmq_system_number_open_files: 50000
 ```
 
 To create a cluster you just have to run this role against the target nodes and
