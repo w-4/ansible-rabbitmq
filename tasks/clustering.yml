@@ -27,6 +27,8 @@
     command: rabbitmqctl join_cluster "rabbit@{{ rabbitmq_master_node }}"
     register: cluster_joined
     when: "inventory_hostname != rabbitmq_master_node"
+    retries: 2
+    delay: 1
 
   - name: start rabbitmq app
     command: rabbitmqctl start_app
@@ -36,4 +38,4 @@
     - rabbitmq_clustering_enabled
     - rabbitmq_master_node is defined
     - rabbitmq_erlang_cookie is defined
-    - nodes_count.stdout|int == 1
+    - nodes_count.stdout|int < play_hosts|length
