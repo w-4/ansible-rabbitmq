@@ -31,7 +31,7 @@
 
 - name: install rabbitmq-server {{ rabbitmq_version }} (RedHat)
   yum:
-    name: "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/{{ rabbitmq_version }}/rabbitmq-server-{{ rabbitmq_version }}-1.el7.noarch.rpm"
+    name: "rabbitmq-server-{{ rabbitmq_version }}"
     state: present
 
 - name: enable rabbitmq-server to survive reboot
