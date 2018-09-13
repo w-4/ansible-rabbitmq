@@ -59,3 +59,10 @@ rabbitmq_plugins:
 # RabbitMQ cluster
 rabbitmq_clustering_enabled: false
 rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
+
+
+# All rabbitmq repositories on satellite
+rabbit_repository_on_satellite:
+  - "Buy4_RabbitMQ_RabbitMG_3_7"
+  - "Buy4_RabbitMQ_RabbitMQ_3_6"
+  - "Buy4_Erlang_Erlang_RH7"
