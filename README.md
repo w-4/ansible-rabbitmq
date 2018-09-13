@@ -93,6 +93,12 @@ rabbitmq_plugins:
 rabbitmq_clustering_enabled: false
 rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
 
+
+# RabbitMQ repositories on satellite
+rabbitmq_repository_on_satellite:
+  - "repo-1"
+  - "repo-2"
+
 ```
 
 ## Dependencies
