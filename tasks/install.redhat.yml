@@ -14,6 +14,7 @@
   rpm_key:
     key: https://packages.erlang-solutions.com/rpm/erlang_solutions.asc
     state: present
+  when: ansible_distribution != "RedHat"
 
 - name: copy erlang repository
   copy:
