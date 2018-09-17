@@ -33,8 +33,17 @@
 
 - name: install rabbitmq-server {{ rabbitmq_version }} (RedHat)
   yum:
+    name: "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/{{ rabbitmq_version }}/rabbitmq-server-{{ rabbitmq_version }}-1.el7.noarch.rpm"
+    state: present
+  when: rabbitmq_repository_on_satellite is not defined
+
+
+- name: install rabbitmq-server {{ rabbitmq_version }} (RedHat)
+  yum:
     name: "rabbitmq-server-{{ rabbitmq_version }}"
     state: present
+  when: rabbitmq_repository_on_satellite is defined
+
 
 - name: enable rabbitmq-server to survive reboot
   service:
