@@ -10,7 +10,7 @@ rabbitmq_install_enabled: true
 # Install specific RabbitMQ version, unless it's redefined
 rabbitmq_major: 3
 rabbitmq_minor: 7
-rabbitmq_patch: 4
+rabbitmq_patch: 7
 rabbitmq_release: "*"
 rabbitmq_version: "{{rabbitmq_major}}.{{rabbitmq_minor}}.{{rabbitmq_patch}}"
 
@@ -59,3 +59,7 @@ rabbitmq_plugins:
 # RabbitMQ cluster
 rabbitmq_clustering_enabled: false
 rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
+
+
+# RabbitMQ repositories on satellite
+rabbitmq_repository_on_satellite:

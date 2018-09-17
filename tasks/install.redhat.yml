@@ -1,4 +1,11 @@
 ---
+- name: Subscribe to puppet repository on satellite.
+  rhsm_repository:
+    name: "{{ item }}"
+    state: disabled
+  with_items: "{{ rabbitmq_repository_on_satellite }}"
+  when: rabbitmq_repository_on_satellite is defined
+
 - name: install rabbitmq-server dependencies (RedHat)
   yum: name="{{ item }}" state=present
   with_items:
@@ -8,6 +15,7 @@
   rpm_key:
     key: https://packages.erlang-solutions.com/rpm/erlang_solutions.asc
     state: present
+  when: ansible_distribution != "RedHat"
 
 - name: copy erlang repository
   copy:
@@ -27,6 +35,15 @@
   yum:
     name: "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/{{ rabbitmq_version }}/rabbitmq-server-{{ rabbitmq_version }}-1.el7.noarch.rpm"
     state: present
+  when: rabbitmq_repository_on_satellite is not defined
+
+
+- name: install rabbitmq-server {{ rabbitmq_version }} (RedHat)
+  yum:
+    name: "rabbitmq-server-{{ rabbitmq_version }}"
+    state: present
+  when: rabbitmq_repository_on_satellite is defined
+
 
 - name: enable rabbitmq-server to survive reboot
   service:
