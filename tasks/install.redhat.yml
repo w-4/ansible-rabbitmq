@@ -2,7 +2,7 @@
 - name: Subscribe to puppet repository on satellite.
   rhsm_repository:
     name: "{{ item }}"
-    state: disabled
+    state: enabled
   with_items: "{{ rabbitmq_repository_on_satellite }}"
   when: rabbitmq_repository_on_satellite is defined
 
