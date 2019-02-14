@@ -1,0 +1,26 @@
+---
+- name: "add bintray rabbitmq repository's key"
+  apt_key:
+    url: "https://bintray.com/user/downloadSubjectPublicKey?username=rabbitmq"
+    state: present
+  when: not rabbitmq_os_package
+
+- name: add bintray rabbitmq repository
+  copy:
+    src: rabbitmq.bintray.list
+    dest: /etc/apt/sources.list.d/
+    backup: yes
+  when: not rabbitmq_os_package
+
+- name: install rabbitmq-server
+  apt:
+    name: rabbitmq-server
+    update_cache: yes
+    state: present
+    force: yes
+
+- name: enable rabbitmq-server to survive reboot
+  service:
+    name: rabbitmq-server
+    enabled: yes
+    state: stopped
