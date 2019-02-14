@@ -1,7 +1,7 @@
 ---
 - name: "add the official rabbitmq repository's key"
   apt_key:
-    url: "https://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
+    url: "https://www.rabbitmq.com/rabbitmq-release-signing-key.asc"
     state: present
   when: not rabbitmq_os_package
 
