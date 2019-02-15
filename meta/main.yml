@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: rabbitmq
   author: Carlos Martins
   description: Role for installing RabbitMQ server
   company: Stone Pagamentos S.A.
