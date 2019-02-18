@@ -1,17 +1,24 @@
 ---
+dependencies: []
+
 galaxy_info:
   role_name: rabbitmq
-  author: Carlos Martins
+  author: mvasilenko
   description: Role for installing RabbitMQ server
   company: "TestCompany"
   license: "license (BSD, MIT)"
   min_ansible_version: 2.0.0
   platforms:
-    - name: Debian
-      versions:
     - name: EL
       versions:
+        - 6
         - 7
-  galaxy_tags: []
-
-dependencies: []
+    - name: Fedora
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
