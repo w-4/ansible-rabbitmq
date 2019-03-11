@@ -14,10 +14,13 @@
 
 - name: install rabbitmq-server
   apt:
-    name: rabbitmq-server
+    name: rabbitmq-server={{rabbitmq_package}}
     update_cache: yes
     state: present
     force: yes
+
+- name: update locale
+  command: update-locale LC_ALL=en_US.UTF-8
 
 - name: enable rabbitmq-server to survive reboot
   service:
