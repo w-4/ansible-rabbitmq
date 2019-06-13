@@ -5,7 +5,10 @@
     when: ansible_os_family == 'RedHat'
   - name: install RabbitMQ (Debian)
     include: install.debian.yml
-    when: ansible_os_family == 'Debian'
+    when: ansible_distribution == 'Debian'
+  - name: install RabbitMQ (Ubuntu)
+    include: install.ubuntu.yml
+    when: ansible_distribution == 'Ubuntu'
   when: rabbitmq_install_enabled
   tags: rabbitmq_install
 

@@ -1,23 +1,26 @@
 ---
-- name: "add the official rabbitmq repository's key"
+- name: "add bintray rabbitmq repository's key"
   apt_key:
-    url: "https://www.rabbitmq.com/rabbitmq-release-signing-key.asc"
+    url: "https://bintray.com/user/downloadSubjectPublicKey?username=rabbitmq"
     state: present
   when: not rabbitmq_os_package
 
-- name: add the official rabbitmq repository
+- name: add bintray rabbitmq repository
   copy:
-    src: rabbitmq.list
+    src: rabbitmq.bintray.list
     dest: /etc/apt/sources.list.d/
     backup: yes
   when: not rabbitmq_os_package
 
 - name: install rabbitmq-server
   apt:
-    name: rabbitmq-server
+    name: rabbitmq-server={{rabbitmq_package}}
     update_cache: yes
-    state: installed
+    state: present
     force: yes
+
+- name: update locale
+  command: update-locale LC_ALL=en_US.UTF-8
 
 - name: enable rabbitmq-server to survive reboot
   service:
