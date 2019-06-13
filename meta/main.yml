@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: rabbitmq
-  author: Carlos Martins, mvasilenko
+  author: Carlos Martins
   description: Role for installing RabbitMQ server
   company: Stone Pagamentos S.A.
   license: MIT license
