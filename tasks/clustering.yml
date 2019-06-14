@@ -36,6 +36,7 @@
 
   when:
     - rabbitmq_clustering_enabled
+    - rabbitmq_master_node is defined
     - rabbitmq_master_node_inventory_hostname is defined
     - rabbitmq_erlang_cookie is defined
     - nodes_count.stdout|int < play_hosts|length
