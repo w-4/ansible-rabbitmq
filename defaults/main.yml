@@ -66,4 +66,4 @@ rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
 # RabbitMQ repositories on satellite
 rabbitmq_repository_on_satellite:
 rabbitmq_nodename_prefix: rabbit
-rabbitmq_nodename_hostname: ansible_fqdn
+rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
