@@ -27,7 +27,7 @@ rabbitmq_enabled_plugins_file_group: rabbitmq
 rabbitmq_enabled_plugins_file_mode: 0644
 
 rabbitmq_config_file_path: "/etc/rabbitmq/rabbitmq.config"
-rabbitmq_env_variables_file_path: "/etc/rabbitmq/rabbitmq-env.config"
+rabbitmq_env_variables_file_path: "/etc/rabbitmq/rabbitmq-env.conf"
 rabbitmq_config_file_owner: root
 rabbitmq_config_file_group: rabbitmq
 rabbitmq_config_file_mode: 0644

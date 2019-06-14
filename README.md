@@ -159,6 +159,14 @@ give some extra vars.
       rabbitmq_clustering_enabled: true
       rabbitmq_master_node: "your_master_node"
 ```
+To create a cluster using FQDN for hosts, just set USE_LONGNAME.
+
+```yaml
+    vars:
+      rabbitmq_conf_env:
+        USE_LONGNAME: "true"
+```
+
 
 Notice that the cookie is hash string that can be of any size. A good practice is
 use a hash of 20 characters. This is the syncronization cookie used by erlang to
