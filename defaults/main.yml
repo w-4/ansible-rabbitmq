@@ -61,9 +61,9 @@ rabbitmq_plugins:
 # RabbitMQ cluster
 rabbitmq_clustering_enabled: false
 rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
-
+rabbitmq_master_node_inventory_hostname: "{{rabbitmq_master_node}}"
+rabbitmq_nodename_prefix: rabbit
+rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
 
 # RabbitMQ repositories on satellite
 rabbitmq_repository_on_satellite:
-rabbitmq_nodename_prefix: rabbit
-rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
