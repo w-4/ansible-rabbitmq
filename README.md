@@ -114,7 +114,7 @@ None yet.
       roles:
         - stone-payments.rabbitmq
 ```
-By default this role will install the currently last upstream version of RabbitMQ (which is 3.7.4). If you want to install any other version you must give the version numbers.
+By default this role will install the currently last upstream version of RabbitMQ (which is 3.7.15). If you want to install any other version you must give the version numbers.
 
 ```yaml
     - hosts: servers
@@ -125,13 +125,14 @@ By default this role will install the currently last upstream version of RabbitM
           rabbitmq_patch: 9
 ```
 
-Specific RabbitMQ environment variables can also be given.
+By default the role will try the configure the NODENAME with `rabbit@{{ansible_fqdn}}` when clustering is enabled, if you want to customize the node name, you can substitute the NODENAME with the variables `rabbitmq_nodename_prefix`and `rabbitmq_nodename_hostname`.
+
+Others specific RabbitMQ environment variables can also be given.
 
 ```yaml
     vars:
       rabbitmq_conf_env:
         RABBITMQ_NODE_IP_ADDRESS: "127.0.0.2"
-        RABBITMQ_NODENAME: "nodename"
 ```
 
 You can alter: 

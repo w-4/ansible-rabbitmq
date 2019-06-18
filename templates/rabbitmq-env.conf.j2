@@ -1,4 +1,4 @@
 {% for variable,value in rabbitmq_conf_env.iteritems() %}
 {{ variable|upper() }}={{ value }}
 {% endfor %}
-NODENAME=rabbit@{{ inventory_hostname }}
+NODENAME={{ rabbitmq_nodename_prefix }}@{{ rabbitmq_nodename_hostname }}
