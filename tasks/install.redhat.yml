@@ -1,47 +1,74 @@
 ---
-- name: Subscribe to puppet repository on satellite.
-  rhsm_repository:
-    name: "{{ item }}"
-    state: enabled
-  with_items: "{{ rabbitmq_repository_on_satellite }}"
+- block:
+  - name: Subscribe to puppet repository on satellite.
+    rhsm_repository:
+      name: "{{ item }}"
+      state: enabled
+    with_items: "{{ rabbitmq_repository_on_satellite }}"
+
+  - name: install rabbitmq-server dependencies (RedHat)
+    yum: name="{{ item }}" state=present
+    with_items:
+      - libselinux-python
   when: rabbitmq_repository_on_satellite is defined
 
-- name: install rabbitmq-server dependencies (RedHat)
-  yum: name="{{ item }}" state=present
-  with_items:
-    - libselinux-python
+- block:
+  - name: add package-cloud rabbitmq-erlang rpm key
+    rpm_key:
+      key: https://packagecloud.io/rabbitmq/erlang/gpgkey
+      state: present
 
-- name: add erlang rpm key
-  rpm_key:
-    key: https://packages.erlang-solutions.com/rpm/erlang_solutions.asc
-    state: present
+  - name: add package-cloud rabbitmq-server rpm key
+    rpm_key:
+      key: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+      state: present
+
+  - name: add package-cloud rabbitmq-erlang repo
+    yum_repository:
+        name: rabbitmq_erlang
+        enabled: yes
+        repo_gpgcheck: yes
+        sslverify: yes
+        gpgkey: https://packagecloud.io/rabbitmq/erlang/gpgkey
+        state: present
+        gpgcheck: no
+        metadata_expire: 300
+        baseurl: https://packagecloud.io/rabbitmq/erlang/el/$releasever/$basearch
+
+  - name: add package-cloud rabbitmq-server repo
+    yum_repository:
+        name: rabbitmq_rabbitmq-server
+        enabled: yes
+        repo_gpgcheck: yes
+        sslverify: yes
+        gpgkey: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+        state: present
+        gpgcheck: no
+        metadata_expire: 300
+        baseurl: https://packagecloud.io/rabbitmq/rabbitmq-server/el/$releasever/$basearch
   when: ansible_distribution != "RedHat"
 
-- name: copy erlang repository
-  copy:
-    src: erlang.repo
-    dest: /etc/yum.repos.d/
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_distribution != "RedHat"
+# - name: install erlang
+#   yum:
+#     name: erlang
+#     state: present
 
-- name: install erlang
+- name: install rabbitmq-server {{ rabbitmq_version }} (RedHat Family w/o sattelite)
   yum:
-    name: erlang
-    state: present
-
-- name: install rabbitmq-server {{ rabbitmq_version }} (RedHat)
-  yum:
-    name: "https://dl.bintray.com/rabbitmq/all/rabbitmq-server/{{ rabbitmq_version }}/rabbitmq-server-{{ rabbitmq_version }}-1.el7.noarch.rpm"
+    name: "rabbitmq-server-{{ rabbitmq_package }}.el7.noarch"
     state: present
   when: rabbitmq_repository_on_satellite is not defined
 
+- block:
+  - name: install erlang
+    yum:
+      name: erlang
+      state: present
 
-- name: install rabbitmq-server {{ rabbitmq_version }} (RedHat)
-  yum:
-    name: "rabbitmq-server-{{ rabbitmq_version }}"
-    state: present
+  - name: install rabbitmq-server {{ rabbitmq_version }} (RedHat Distro with sattelite)
+    yum:
+      name: "rabbitmq-server-{{ rabbitmq_version }}"
+      state: present
   when: rabbitmq_repository_on_satellite is defined
 
 
