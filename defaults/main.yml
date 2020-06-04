@@ -66,4 +66,4 @@ rabbitmq_nodename_prefix: rabbit
 rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
 
 # RabbitMQ repositories on satellite
-rabbitmq_repository_on_satellite:
+# rabbitmq_repository_on_satellite:

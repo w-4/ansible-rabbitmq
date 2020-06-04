@@ -34,6 +34,7 @@
         gpgcheck: no
         metadata_expire: 300
         baseurl: https://packagecloud.io/rabbitmq/erlang/el/$releasever/$basearch
+        description: RabbitMQ-Erlang Repo
 
   - name: add package-cloud rabbitmq-server repo
     yum_repository:
@@ -46,6 +47,7 @@
         gpgcheck: no
         metadata_expire: 300
         baseurl: https://packagecloud.io/rabbitmq/rabbitmq-server/el/$releasever/$basearch
+        description: RabbitMQ-Server Repo
   when: ansible_distribution != "RedHat"
 
 # - name: install erlang
