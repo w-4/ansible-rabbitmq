@@ -65,5 +65,7 @@ rabbitmq_master_node_inventory_hostname: "{{rabbitmq_master_node}}"
 rabbitmq_nodename_prefix: rabbit
 rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
 
-# RabbitMQ repositories on satellite
+# RabbitMQ repositories on satellite or katello
 # rabbitmq_repository_on_satellite:
+#   - erlang
+#   - rabbitmq-server
