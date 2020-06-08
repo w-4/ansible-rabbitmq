@@ -6,10 +6,6 @@
       state: enabled
     with_items: "{{ rabbitmq_repository_on_satellite }}"
 
-  - name: install rabbitmq-server dependencies (RedHat)
-    yum: name="{{ item }}" state=present
-    with_items:
-      - libselinux-python
   when: rabbitmq_repository_on_satellite is defined
 
 - block:
@@ -50,8 +46,13 @@
         description: RabbitMQ-Server Repo
   when: rabbitmq_repository_on_satellite is undefined
 
+- name: install rabbitmq-server dependencies (RedHat)
+  package:
+    name: ['libselinux-python']
+    state: present
+
 - name: install rabbitmq-server {{ rabbitmq_version }} (RedHat Family w/o sattelite)
-  yum:
+  package:
     name: "rabbitmq-server-{{ rabbitmq_package }}.el7.noarch"
     state: present
 
