@@ -1,0 +1,3 @@
+- src: git+git@stone.github.com:stone-payments/ansible-disk-manager.git
+  version: v1.0.0
+  name: stone-payments.disk-manager

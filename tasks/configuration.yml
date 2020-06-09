@@ -10,8 +10,8 @@
 
 - name: Check if rabbitmq_conf_vm_memory_high_watermark is under the recommended range
   fail:
-    msg: "The recommended vm_memory_high_watermark range is 0.4 to 0.66."
-  when: rabbitmq_conf_vm_memory_high_watermark < 0.4 or rabbitmq_conf_vm_memory_high_watermark > 0.66
+    msg: "The recommended vm_memory_high_watermark range is 0.4 to 0.7."
+  when: rabbitmq_conf_vm_memory_high_watermark < 0.4 or rabbitmq_conf_vm_memory_high_watermark > 0.7
 
 - name: copy the rabbitmq configuration file
   template:
@@ -59,6 +59,9 @@
 
 - name: ensure rabbitmq app is started
   command: rabbitmqctl start_app
+  register: result
+  changed_when: 'Starting node rabbit in result.out|default("")'
+
 
 - name: ensure the users are removed
   rabbitmq_user:

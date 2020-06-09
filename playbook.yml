@@ -1,12 +1,40 @@
 ---
 
-- include: tests/hosts.yml
-
 - name: queue service clustered
-  hosts: group2
+  hosts: all
   become: true
-  roles:
-    - role: ansible-rabbitmq
-      rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
-      rabbitmq_clustering_enabled: true
-      rabbitmq_master_node: "virtualmachine-clustered01"
+  tasks:
+    - include_role:
+        name: stone-payments.disk-manager
+      tags: config-disk-manager
+      vars:
+        diskmanager_management_lvm: true
+        diskmanager_lvm_configs:
+          - pvs_name: '/dev/sdb'
+            vg_name: rmqvg
+            lv_name: rmq
+            lv_size: +100%FREE
+            fstype: ext4
+            shrink: false
+            resizefs: false
+            mount: true
+            mount_point_path: /var/lib/rabbitmq
+            mount_point_owner: root
+            mount_point_group: root
+            mount_point_opts: defaults
+
+    - include_role:
+        name: ansible-rabbitmq
+      vars:
+        rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
+        rabbitmq_clustering_enabled: false
+        # rabbitmq_master_node: "virtualmachine-clustered01"
+        rabbitmq_repository_on_satellite:
+          - Stone_RabbitMQ_erlang_rhel7
+          - Stone_RabbitMQ_38_rhel7
+        rabbitmq_system_number_open_files: 499000
+        # rabbitmq_conf_env:
+        rabbitmq_conf_disk_free_limit_mem_relative: 1.5
+        rabbitmq_conf_vm_memory_high_watermark: 0.7
+        rabbit_conf_num_acceptors_tcp: 100
+

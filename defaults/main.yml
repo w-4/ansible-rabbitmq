@@ -35,6 +35,7 @@ rabbitmq_config_file_mode: 0644
 # Variables can be overriden to adapt to the user case
 rabbitmq_conf_disk_free_limit_mem_relative: 1.5
 rabbitmq_conf_vm_memory_high_watermark: 0.4
+rabbit_conf_num_acceptors_tcp: 10
 
 # system number of open files
 rabbitmq_service_d_path: /etc/systemd/system/rabbitmq-server.service.d

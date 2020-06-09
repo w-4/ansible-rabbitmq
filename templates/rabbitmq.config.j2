@@ -1,20 +1,13 @@
-[
-  {rabbit, [
-    {loopback_users, []},
-    {disk_free_limit, {mem_relative, {{ rabbitmq_conf_disk_free_limit_mem_relative }}}},
-    {vm_memory_high_watermark, {{ rabbitmq_conf_vm_memory_high_watermark }}},
-    {% if rabbitmq_conf_tcp_listeners_address != '' %}
-    {tcp_listeners, [{"{{ rabbitmq_conf_tcp_listeners_address }}", {{ rabbitmq_conf_tcp_listeners_port }}}]}
-    {% else %}
-    {tcp_listeners, [{{ rabbitmq_conf_tcp_listeners_port }}]}
-    {% endif %}
-  ]},
-  {kernel, []},
-	{rabbitmq_management, []},
-	{rabbitmq_management_agent, []},
-	{rabbitmq_shovel, [{shovels,[]} ]},
-	{rabbitmq_stomp, []},
-	{rabbitmq_mqtt, []},
-	{rabbitmq_amqp1_0, []},
-	{rabbitmq_auth_backend_ldap, []}
-].
+loopback_users.guest = false
+
+disk_free_limit.relative = {{ rabbitmq_conf_disk_free_limit_mem_relative }}
+
+listeners.tcp.local = {{ rabbitmq_conf_tcp_listeners_port }}
+
+listeners.tcp.default = {% if rabbitmq_conf_tcp_listeners_address is defined %}{{ rabbitmq_conf_tcp_listeners_address}}:{% endif %}{{ rabbitmq_conf_tcp_listeners_port }}
+
+num_acceptors.tcp = {{ rabbit_conf_num_acceptors_tcp || default(10)}}
+
+vm_memory_high_watermark.relative = {{ rabbitmq_conf_vm_memory_high_watermark }}
+
+
