@@ -6,7 +6,7 @@ listeners.tcp.local = {{ rabbitmq_conf_tcp_listeners_port }}
 
 listeners.tcp.default = {% if rabbitmq_conf_tcp_listeners_address is defined %}{{ rabbitmq_conf_tcp_listeners_address}}:{% endif %}{{ rabbitmq_conf_tcp_listeners_port }}
 
-num_acceptors.tcp = {{ rabbit_conf_num_acceptors_tcp || default(10)}}
+num_acceptors.tcp = {{ rabbit_conf_num_acceptors_tcp | default(10)}}
 
 vm_memory_high_watermark.relative = {{ rabbitmq_conf_vm_memory_high_watermark }}
 

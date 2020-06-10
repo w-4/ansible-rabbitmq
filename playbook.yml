@@ -22,6 +22,7 @@
             mount_point_owner: root
             mount_point_group: root
             mount_point_opts: defaults
+            state: present
 
     - include_role:
         name: ansible-rabbitmq
