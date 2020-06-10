@@ -13,6 +13,7 @@ testinfra = "*"
 
 [packages]
 ansible = "~=2.9.0"
+netaddr = "*"
 
 [requires]
 python_version = "3.7"

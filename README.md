@@ -38,7 +38,7 @@ EPEL repositories. Alternatively, you can use our role
 # Take the package given by the OS/distrib
 rabbitmq_os_package: false
 
-# Allways install RabbitMQ, 
+# Allways install RabbitMQ,
 # unless it's already installed and you don't want it to be replaced
 rabbitmq_install_enabled: true
 
@@ -59,7 +59,7 @@ rabbitmq_enabled_plugins_file_owner: root
 rabbitmq_enabled_plugins_file_group: rabbitmq
 rabbitmq_enabled_plugins_file_mode: 0644
 
-rabbitmq_config_file_path: "/etc/rabbitmq/rabbitmq.config"
+rabbitmq_config_file_path: "/etc/rabbitmq/rabbitmq.conf"
 rabbitmq_env_variables_file_path: "/etc/rabbitmq/rabbitmq-env.config"
 rabbitmq_config_file_owner: root
 rabbitmq_config_file_group: rabbitmq
@@ -67,7 +67,7 @@ rabbitmq_config_file_mode: 0644
 
 # Variables can be overriden to adapt to the user case
 rabbitmq_conf_disk_free_limit_mem_relative: 1.5
-rabbitmq_conf_vm_memory_high_watermark: 0.4 
+rabbitmq_conf_vm_memory_high_watermark: 0.4
 
 # system number of open files
 rabbitmq_service_d_path: /etc/systemd/system/rabbitmq-server.service.d
@@ -135,10 +135,10 @@ Others specific RabbitMQ environment variables can also be given.
         RABBITMQ_NODE_IP_ADDRESS: "127.0.0.2"
 ```
 
-You can alter: 
+You can alter:
 * Memory watermark (`rabbitmq_conf_disk_free_limit_mem_relative`);
 * Free disk space limit (`rabbitmq_conf_vm_memory_high_watermark`);
-* Number of system's open files (`rabbitmq_system_number_open_files`). 
+* Number of system's open files (`rabbitmq_system_number_open_files`).
 
 ```yaml
     vars:
