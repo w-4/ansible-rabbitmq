@@ -26,6 +26,7 @@
 
     - include_role:
         name: ansible-rabbitmq
+      tags: rabbitmq_configuration
       vars:
         rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
         rabbitmq_clustering_enabled: true
@@ -39,4 +40,15 @@
         rabbitmq_conf_disk_free_limit_mem_relative: 1.5
         rabbitmq_conf_vm_memory_high_watermark: 0.7
         rabbit_conf_num_acceptors_tcp: 100
+
+
+    - include_role:
+        name: newrelic.infrastructure-agent
+      tags: "nri-inf-agent"
+      vars:
+        # New relic variables
+        nrinfragent_config:
+          license_key: "{{ lookup('env','newrelic_license_key') }}"
+          log_file: "/var/log/newrelic-infra/nr-infra.log"
+
 

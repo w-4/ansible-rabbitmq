@@ -1,3 +1,7 @@
 - src: git+git@stone.github.com:stone-payments/ansible-disk-manager.git
   version: v1.0.0
   name: stone-payments.disk-manager
+
+- src: https://github.com/newrelic/infrastructure-agent-ansible.git
+  version: 0.8.2
+  name: newrelic.infrastructure-agent
