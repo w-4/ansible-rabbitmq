@@ -30,6 +30,7 @@
         rabbitmq_erlang_cookie: QDRDOLMCHSLSZMCRBQYV
         rabbitmq_clustering_enabled: true
         rabbitmq_master_node: "fin-v-rmq1-2p01"
+        rabbitmq_master_node_inventory_hostname: "fin-v-rmq1-2p01.ad.stone.com.br"
         rabbitmq_repository_on_satellite:
           - Stone_RabbitMQ_erlang_rhel7
           - Stone_RabbitMQ_38_rhel7
