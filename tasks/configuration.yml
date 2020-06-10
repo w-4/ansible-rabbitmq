@@ -59,9 +59,6 @@
 
 - name: ensure rabbitmq app is started
   command: rabbitmqctl start_app
-  register: result
-  changed_when: 'Starting node rabbit in result.out|default("")'
-
 
 - name: ensure the users are removed
   rabbitmq_user:
