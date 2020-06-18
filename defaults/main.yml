@@ -71,6 +71,7 @@ rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
 #   - Stone_RabbitMQ_erlang_rhel7
 #   - Stone_RabbitMQ_38_rhel7
 
+rabbitmq_newrelic_agent_enabled: false
 rabbitmq_newrelic_agent_config_file_path: "/etc/newrelic-infra/integrations.d/rabbitmq-config.yml"
 rabbitmq_newrelic_cluster_name: "cluster_name"
 rabbitmq_newrelic_command: "all"
