@@ -13,6 +13,6 @@
 - block:
   - name: configure nri-rabbitmq
     template:
-      src=newrelic-rabbitmq-config.yml
+      src=newrelic-rabbitmq-config.yml.j2
       dest={{ rabbitmq_newrelic_agent_config_file_path }}
       backup=yes
