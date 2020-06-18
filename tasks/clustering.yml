@@ -1,6 +1,18 @@
 ---
+- name: set random erlang cookie
+  set_fact:
+    rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
+  run_once: true
+  delegate_to: ansible_play_hosts_all[0]
+  when: rabbitmq_erlang_cookie is undefined
 
 - block:
+  - name: force longnames when rabbit is in cluster
+    set_fact:
+      rabbitmq_conf_env: "{{ rabbitmq_conf_env | default([]) }} + {{ [ USE_LONGNAME: 'true'] }}"
+
+  - debug: var=rabbitmq_conf_env
+
   - name: copy erlang cookie
     template:
       src: erlang.cookie.j2
@@ -17,21 +29,25 @@
 
   - name: stop rabbitmq app
     command: rabbitmqctl stop_app
-    when: "inventory_hostname != rabbitmq_master_node_inventory_hostname"
+    when: "inventory_hostname != ansible_play_hosts_all[0]"
 
   - name: join rabbitmq cluster
-    command: rabbitmqctl join_cluster "rabbit@{{ rabbitmq_master_node }}"
+    command: rabbitmqctl join_cluster "rabbit@{{ ansible_play_hosts_all[0] }}"
     register: cluster_joined
-    when: "inventory_hostname != rabbitmq_master_node_inventory_hostname"
+    when: "inventory_hostname != ansible_play_hosts_all[0]"
     retries: 2
-    delay: 1
+    delay: 5
 
   - name: start rabbitmq app
     command: rabbitmqctl start_app
-    when: "inventory_hostname != rabbitmq_master_node_inventory_hostname"
+    when: "inventory_hostname != ansible_play_hosts_all[0]"
 
   when:
     - rabbitmq_clustering_enabled
-    - rabbitmq_master_node is defined
-    - rabbitmq_master_node_inventory_hostname is defined
-    - rabbitmq_erlang_cookie is defined
+
+## In cluster environments, only one node should use the all command; the rest should use the inventory command.
+## ref: https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/rabbitmq-monitoring-integration#config
+- name: force newrelic rabbitmq agent command as inventory
+  set_fact:
+    rabbitmq_newrelic_command: inventory
+  when: "inventory_hostname != ansible_play_hosts_all[0]"

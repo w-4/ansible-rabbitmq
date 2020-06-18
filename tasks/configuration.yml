@@ -68,8 +68,8 @@
 
 - name: ensure users exist
   rabbitmq_user:
-    user={{ item }}
-    password={{ item }}
+    user={{ item.key }}
+    password={{ item.value }}
     tags={{ rabbitmq_administrator_tag }}
     state=present
-  with_items: "{{ rabbitmq_users }}"
+  with_items: "{{ lookup('dict', rabbitmq_users) }}"

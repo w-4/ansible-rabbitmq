@@ -46,7 +46,7 @@ rabbitmq_users_remove:
   - guest
 
 rabbitmq_users:
-  - rabbitmq
+  - rabbitmq-admin: "{{ lookup('env', 'RABBITMQ_ADMIN_PASSWORD' ) | default('rabbitmq') }}"
 
 rabbitmq_administrator_tag: administrator
 
@@ -56,13 +56,13 @@ rabbitmq_sbin_path: "/usr/lib/rabbitmq/sbin"
 rabbitmq_plugins_prefix_path: "/usr/lib/rabbitmq"
 rabbitmq_plugins:
   - rabbitmq_management
-  - rabbitmq_shovel
-  - rabbitmq_shovel_management
+  # - rabbitmq_shovel
+  # - rabbitmq_shovel_management
 
 # RabbitMQ cluster
 rabbitmq_clustering_enabled: false
 rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
-rabbitmq_master_node_inventory_hostname: "{{rabbitmq_master_node}}"
+# rabbitmq_master_node_inventory_hostname: "{{rabbitmq_master_node}}"
 rabbitmq_nodename_prefix: rabbit
 rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
 
@@ -70,3 +70,19 @@ rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
 # rabbitmq_repository_on_satellite:
 #   - Stone_RabbitMQ_erlang_rhel7
 #   - Stone_RabbitMQ_38_rhel7
+
+rabbitmq_newrelic_agent_config_file_path: "/etc/newrelic-infra/integrations.d/rabbitmq-config.yml"
+rabbitmq_newrelic_cluster_name: "cluster_name"
+rabbitmq_newrelic_command: "all"
+rabbitmq_newrelic_hostname: "localhost"
+rabbitmq_newrelic_port: 15672
+rabbitmq_newrelic_use_ssl: false
+rabbitmq_newrelic_username: "{{ lookup('dict', rabbitmq_users).key }}"
+rabbitmq_newrelic_password: "{{ lookup('dict', rabbitmq_users).value }}"
+rabbitmq_newrelic_config_path: "{{ rabbitmq_config_file_path }}"
+rabbitmq_newrelic_queues:
+rabbitmq_newrelic_exchanges:
+rabbitmq_newrelic_vhosts:
+rabbitmq_newrelic_labels:
+  env: test
+  role: rabbitmq

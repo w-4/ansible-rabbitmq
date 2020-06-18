@@ -1,0 +1,18 @@
+
+- name: Install and activate new-relic infra agent and rabbitmq agent
+  include_role:
+    name: newrelic.infrastructure-agent
+  vars:
+    nrinfragent_config:
+      license_key: "{{ lookup('env', 'NEWRELIC_LICENSE_KEY') | mandatory }}"
+      log_file: "/var/log/newrelic-infra/nr-infra.log"
+    nrinfragent_integrations:
+      - name: nri-rabbitmq
+        state: "latest"
+
+- block:
+  - name: configure nri-rabbitmq
+    template:
+      src=newrelic-rabbitmq-config.yml
+      dest={{ rabbitmq_newrelic_agent_config_file_path }}
+      backup=yes
