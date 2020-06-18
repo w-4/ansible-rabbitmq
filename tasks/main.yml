@@ -1,37 +1,39 @@
 ---
-- block:
-  - name: install RabbitMQ (RedHat)
-    include_task: install.redhat.yml
-    when: ansible_os_family == 'RedHat'
-  - name: install RabbitMQ (Debian)
-    include_task: install.debian.yml
-    when: ansible_distribution == 'Debian'
-  - name: install RabbitMQ (Ubuntu)
-    include_task: install.ubuntu.yml
-    when: ansible_distribution == 'Ubuntu'
-  when: rabbitmq_install_enabled
-  tags: rabbitmq_install
 
-- name: configure queue service
-  include_task: configuration.yml
-  tags: rabbitmq_configuration
+tasks:
+  - block:
+    - name: install RabbitMQ (RedHat)
+      include_task: install.redhat.yml
+      when: ansible_os_family == 'RedHat'
+    - name: install RabbitMQ (Debian)
+      include_task: install.debian.yml
+      when: ansible_distribution == 'Debian'
+    - name: install RabbitMQ (Ubuntu)
+      include_task: install.ubuntu.yml
+      when: ansible_distribution == 'Ubuntu'
+    when: rabbitmq_install_enabled
+    tags: rabbitmq_install
 
-- name: install plugins
-  include_task: plugins.yml
-  tags: rabbitmq_plugins
+  - name: configure queue service
+    include_task: configuration.yml
+    tags: rabbitmq_configuration
 
-- name: ensure rabbitmq server is running
-  service:
-    name: rabbitmq-server
-    state: restarted
-  changed_when: false
+  - name: install plugins
+    include_task: plugins.yml
+    tags: rabbitmq_plugins
 
-- name: configure cluster
-  include_task: clustering.yml
-  when: rabbitmq_clustering_enabled
-  tags: rabbitmq_clustering
+  - name: ensure rabbitmq server is running
+    service:
+      name: rabbitmq-server
+      state: restarted
+    changed_when: false
 
-- name: configure new-relic rabbitmq infra agent
-  include_task: monitoring-nr.yml
-  when: rabbitmq_newrelic_agent_enabled
-  tags: rabbitmq_monitoring
+  - name: configure cluster
+    include_task: clustering.yml
+    when: rabbitmq_clustering_enabled
+    tags: rabbitmq_clustering
+
+  - name: configure new-relic rabbitmq infra agent
+    include_task: monitoring-nr.yml
+    when: rabbitmq_newrelic_agent_enabled
+    tags: rabbitmq_monitoring
