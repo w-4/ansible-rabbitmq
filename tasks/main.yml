@@ -2,23 +2,23 @@
 
 - block:
   - name: install RabbitMQ (RedHat)
-    include_tasks:: install.redhat.yml
+    include_tasks: install.redhat.yml
     when: ansible_os_family == 'RedHat'
   - name: install RabbitMQ (Debian)
-    include_tasks:: install.debian.yml
+    include_tasks: install.debian.yml
     when: ansible_distribution == 'Debian'
   - name: install RabbitMQ (Ubuntu)
-    include_tasks:: install.ubuntu.yml
+    include_tasks: install.ubuntu.yml
     when: ansible_distribution == 'Ubuntu'
   when: rabbitmq_install_enabled
   tags: rabbitmq_install
 
 - name: configure queue service
-  include_tasks:: configuration.yml
+  include_tasks: configuration.yml
   tags: rabbitmq_configuration
 
 - name: install plugins
-  include_tasks:: plugins.yml
+  include_tasks: plugins.yml
   tags: rabbitmq_plugins
 
 - name: ensure rabbitmq server is running
@@ -28,11 +28,11 @@
   changed_when: false
 
 - name: configure cluster
-  include_tasks:: clustering.yml
+  include_tasks: clustering.yml
   when: rabbitmq_clustering_enabled
   tags: rabbitmq_clustering
 
 - name: configure new-relic rabbitmq infra agent
-  include_tasks:: monitoring-nr.yml
+  include_tasks: monitoring-nr.yml
   when: rabbitmq_newrelic_agent_enabled
   tags: rabbitmq_monitoring
