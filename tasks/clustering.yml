@@ -42,12 +42,13 @@
     command: rabbitmqctl start_app
     when: "inventory_hostname != ansible_play_hosts_all[0]"
 
+  ## In cluster environments, only one node should use the all command; the rest should use the inventory command.
+  ## ref: https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/rabbitmq-monitoring-integration#config
+  - name: force newrelic rabbitmq agent command as inventory
+    set_fact:
+      rabbitmq_newrelic_command: "inventory"
+    when: "inventory_hostname != ansible_play_hosts_all[0]"
+
   when:
     - rabbitmq_clustering_enabled
 
-## In cluster environments, only one node should use the all command; the rest should use the inventory command.
-## ref: https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/rabbitmq-monitoring-integration#config
-- name: force newrelic rabbitmq agent command as inventory
-  set_fact:
-    rabbitmq_newrelic_command: inventory
-  when: "inventory_hostname != ansible_play_hosts_all[0]"

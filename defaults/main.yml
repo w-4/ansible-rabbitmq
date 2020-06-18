@@ -46,7 +46,7 @@ rabbitmq_users_remove:
   - guest
 
 rabbitmq_users:
-  rabbitmq-admin: "{{ lookup('env', 'RABBITMQ_ADMIN_PASSWORD' ) | default('rabbitmq') }}"
+  rabbitmq-admin: "{{ lookup('env', 'RABBITMQ_ADMIN_PASSWORD' ) | default('rabbitmq', true) }}"
 
 rabbitmq_administrator_tag: administrator
 
