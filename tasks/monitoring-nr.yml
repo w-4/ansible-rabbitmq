@@ -10,9 +10,22 @@
       - name: nri-rabbitmq
         state: "latest"
 
-- block:
-  - name: configure nri-rabbitmq
-    template:
-      src=newrelic-rabbitmq-config.yml.j2
-      dest={{ rabbitmq_newrelic_agent_config_file_path }}
-      backup=yes
+
+- name: set newrelic filters
+  set_fact:
+    rabbitmq_filters:
+      queues: "{{ rabbitmq_newrelic_queues | default(omit, true) }}"
+      exchanges: "{{ rabbitmq_newrelic_exchanges | default(omit, true) }}"
+      vhosts: "{{ rabbitmq_newrelic_vhosts | default(omit, true) }}"
+      queues_regexes: "{{ rabbitmq_newrelic_queues | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
+      exchanges_regexes: "{{ rabbitmq_newrelic_exchanges | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
+      vhosts_regexes: "{{ rabbitmq_newrelic_vhosts | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
+  tags: rabbitmq_monitoring
+
+
+- name: configure nri-rabbitmq
+  template:
+    src=newrelic-rabbitmq-config.yml.j2
+    dest={{ rabbitmq_newrelic_agent_config_file_path }}
+    backup=yes
+  tags: rabbitmq_monitoring

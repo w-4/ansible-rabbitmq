@@ -9,11 +9,9 @@ instances:
       password: {{ rabbitmq_newrelic_password }}
       config_path: {{ rabbitmq_newrelic_config_path }}
       use_ssl: {{ rabbitmq_newrelic_use_ssl }}
-      queues: {{ rabbitmq_newrelic_queues | default(None) | to_json or omit }}
-      exchanges: {{ rabbitmq_newrelic_exchanges | default(None) | to_json or omit }}
-      vhosts: {{ rabbitmq_newrelic_vhosts | default(None) | to_nice_json(indent=8) or omit }}
-      queues_regexes: {{ '[".*"]' | omit if rabbitmq_newrelic_queues is defined }}
-      exchanges_regexes: {{ '[".*"]' | omit if rabbitmq_newrelic_exchanges is defined }}
-      vhosts_regexes: {{ '[".*"]' | omit if rabbitmq_newrelic_vhosts is defined }}
-    labels: {{ rabbitmq_newrelic_labels | dafault(None) | omit }}
-
+{% for k,v in rabbitmq_filters.items() %}
+      {{k}}: '{{v | to_json }}'
+{% endfor %}
+    labels:
+      env: {{ rabbitmq_newrelic_labels.env | default('test', true) }}
+      role: {{ rabbitmq_newrelic_labels.role | default('rabbitmq', true) }}

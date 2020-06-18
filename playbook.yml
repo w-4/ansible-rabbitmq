@@ -26,9 +26,9 @@
 
     - include_role:
         name: ansible-rabbitmq
-      tags: rabbitmq_configuration
+      tags: [ rabbitmq_configuration, rabbitmq_monitoring ]
       vars:
-        rabbitmq_clustering_enabled: true
+        rabbitmq_clustering_enabled: false
         rabbitmq_repository_on_satellite:
           - Stone_RabbitMQ_erlang_rhel7
           - Stone_RabbitMQ_38_rhel7
@@ -38,5 +38,6 @@
         rabbit_conf_num_acceptors_tcp: 100
         rabbitmq_newrelic_agent_enabled: true
         rabbitmq_newrelic_cluster_name: "payments-rabbitmq"
-
-
+        rabbitmq_newrelic_labels:
+          env: test-payments
+          role: rabbitmq
