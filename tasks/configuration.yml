@@ -36,7 +36,6 @@
 
 - debug: var=rabbitmq_conf_env
 
-
 - name: generate rabbitmq environment-variables file
   template:
     src=rabbitmq-env.conf.j2

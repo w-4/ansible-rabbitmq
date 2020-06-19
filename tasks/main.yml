@@ -21,12 +21,6 @@
   include_tasks: plugins.yml
   tags: rabbitmq_plugins
 
-#- name: ensure rabbitmq server is running
-#  service:
-#    name: rabbitmq-server
-#    state: restarted
-#  changed_when: false
-
 - name: configure cluster
   include_tasks: clustering.yml
   when: rabbitmq_clustering_enabled

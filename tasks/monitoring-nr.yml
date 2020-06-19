@@ -1,45 +1,38 @@
+---
+- block:
+  - set_fact:
+      newrelic_license: "{{ lookup('env', 'NEWRELIC_LICENSE_KEY') | default(omit, true) }}"
 
+  - name: check if license key is defined
+    assert:
+      that:
+        - newrelic_license is defined
 
-- set_fact:
-    newrelic_license: "{{ lookup('env', 'NEWRELIC_LICENSE_KEY') | default(omit, true) }}"
-  tags: rabbitmq_monitoring
+  - name: Install and activate new-relic infra agent and rabbitmq agent
+    include_role:
+      name: newrelic.infrastructure-agent
+    vars:
+      nrinfragent_config:
+        license_key: "{{ newrelic_license }}"
+        log_file: "/var/log/newrelic-infra/nr-infra.log"
+      nrinfragent_integrations:
+        - name: nri-rabbitmq
+          state: "latest"
 
-- debug: var=newrelic_license
+  - name: set newrelic filters
+    set_fact:
+      rabbitmq_filters:
+        queues: "{{ rabbitmq_newrelic_queues | default(omit, true) }}"
+        exchanges: "{{ rabbitmq_newrelic_exchanges | default(omit, true) }}"
+        vhosts: "{{ rabbitmq_newrelic_vhosts | default(omit, true) }}"
+        queues_regexes: "{{ rabbitmq_newrelic_queues | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
+        exchanges_regexes: "{{ rabbitmq_newrelic_exchanges | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
+        vhosts_regexes: "{{ rabbitmq_newrelic_vhosts | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
 
-- name: check if license key is defined
-  assert:
-    that:
-      - newrelic_license is defined
-  tags: rabbitmq_monitoring
+  - name: configure nri-rabbitmq
+    template:
+      src=newrelic-rabbitmq-config.yml.j2
+      dest={{ rabbitmq_newrelic_agent_config_file_path }}
+      backup=yes
 
-- name: Install and activate new-relic infra agent and rabbitmq agent
-  include_role:
-    name: newrelic.infrastructure-agent
-  vars:
-    nrinfragent_config:
-      license_key: "{{ newrelic_license }}"
-      log_file: "/var/log/newrelic-infra/nr-infra.log"
-    nrinfragent_integrations:
-      - name: nri-rabbitmq
-        state: "latest"
-  tags: rabbitmq_monitoring
-
-
-- name: set newrelic filters
-  set_fact:
-    rabbitmq_filters:
-      queues: "{{ rabbitmq_newrelic_queues | default(omit, true) }}"
-      exchanges: "{{ rabbitmq_newrelic_exchanges | default(omit, true) }}"
-      vhosts: "{{ rabbitmq_newrelic_vhosts | default(omit, true) }}"
-      queues_regexes: "{{ rabbitmq_newrelic_queues | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
-      exchanges_regexes: "{{ rabbitmq_newrelic_exchanges | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
-      vhosts_regexes: "{{ rabbitmq_newrelic_vhosts | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
-  tags: rabbitmq_monitoring
-
-
-- name: configure nri-rabbitmq
-  template:
-    src=newrelic-rabbitmq-config.yml.j2
-    dest={{ rabbitmq_newrelic_agent_config_file_path }}
-    backup=yes
   tags: rabbitmq_monitoring
