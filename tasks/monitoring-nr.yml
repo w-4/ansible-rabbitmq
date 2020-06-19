@@ -1,24 +1,28 @@
 
 
-- block:
-  - set_fact:
-      newrelic_license: "{{ lookup('env', 'NEWRELIC_LICENSE_KEY') | default(None, true) }}"
+- set_fact:
+    newrelic_license: "{{ lookup('env', 'NEWRELIC_LICENSE_KEY') | default(omit, true) }}"
+  tags: rabbitmq_monitoring
 
-  - name: check if license key is defined
-      assert:
-        that:
-          - newrelic_license is defined
+- debug: var=newrelic_license
+
+- name: check if license key is defined
+  assert:
+    that:
+      - newrelic_license is defined
+  tags: rabbitmq_monitoring
 
 - name: Install and activate new-relic infra agent and rabbitmq agent
   include_role:
     name: newrelic.infrastructure-agent
   vars:
     nrinfragent_config:
-      license_key: "{{ lookup('env', 'NEWRELIC_LICENSE_KEY') | default(None, true) | mandatory }}"
+      license_key: "{{ newrelic_license }}"
       log_file: "/var/log/newrelic-infra/nr-infra.log"
     nrinfragent_integrations:
       - name: nri-rabbitmq
         state: "latest"
+  tags: rabbitmq_monitoring
 
 
 - name: set newrelic filters
