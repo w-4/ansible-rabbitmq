@@ -1,4 +1,4 @@
 NODENAME={{ rabbitmq_nodename_prefix }}@{{ rabbitmq_nodename_hostname }}
-{% for variable,value in rabbitmq_conf_env.iteritems() %}
+{% for variable,value in rabbitmq_conf_env.items() %}
 {{ variable|upper() }}={{ value }}
 {% endfor %}

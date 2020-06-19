@@ -22,9 +22,14 @@
     mode={{ rabbitmq_config_file_mode }}
     backup=yes
 
-- name: force longnames when rabbit is in cluster
-  set_fact:
-    rabbitmq_conf_env: "{{ rabbitmq_conf_env | default([]) }} + {{ [ USE_LONGNAME: 'true'] }}"
+- block:
+  - set_fact:
+      additional_env:
+        USE_LONGNAME: true
+
+  - name: force longnames when rabbit is in cluster
+    set_fact:
+      rabbitmq_conf_env: "{{ rabbitmq_conf_env | default({}) | combine(additional_env) }}"
   when:
     - rabbitmq_clustering_enabled is defined
     - rabbitmq_clustering_enabled
