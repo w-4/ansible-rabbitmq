@@ -29,15 +29,15 @@
         exchanges_regexes: "{{ rabbitmq_newrelic_exchanges | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
         vhosts_regexes: "{{ rabbitmq_newrelic_vhosts | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
 
-    ## In cluster environments, only one node should use the all command; the rest should use the inventory command.
-    ## ref: https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/rabbitmq-monitoring-integration#config
-    - name: force newrelic rabbitmq agent command as inventory
-      set_fact:
-        rabbitmq_newrelic_command: "inventory"
-      when:
-        - rabbitmq_clustering_enabled is defined
-        - rabbitmq_clustering_enabled
-        - "inventory_hostname != ansible_play_hosts_all[0]"
+  ## In cluster environments, only one node should use the all command; the rest should use the inventory command.
+  ## ref: https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/rabbitmq-monitoring-integration#config
+  - name: force newrelic rabbitmq agent command as inventory
+    set_fact:
+      rabbitmq_newrelic_command: "inventory"
+    when:
+      - rabbitmq_clustering_enabled is defined
+      - rabbitmq_clustering_enabled
+      - "inventory_hostname != ansible_play_hosts_all[0]"
 
   - name: configure nri-rabbitmq
     template:
