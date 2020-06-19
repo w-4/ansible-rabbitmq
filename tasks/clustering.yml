@@ -7,12 +7,6 @@
   when: rabbitmq_erlang_cookie is undefined
 
 - block:
-  - name: force longnames when rabbit is in cluster
-    set_fact:
-      rabbitmq_conf_env: "{{ rabbitmq_conf_env | default([]) }} + {{ [ USE_LONGNAME: 'true'] }}"
-
-  - debug: var=rabbitmq_conf_env
-
   - name: copy erlang cookie
     template:
       src: erlang.cookie.j2
