@@ -35,7 +35,7 @@
         rabbitmq_system_number_open_files: 499000
         rabbitmq_conf_disk_free_limit_mem_relative: 1.2
         rabbitmq_conf_vm_memory_high_watermark: 0.7
-        rabbit_conf_num_acceptors_tcp: 100
+        rabbitmq_conf_num_acceptors_tcp: 100
         rabbitmq_newrelic_agent_enabled: true
         rabbitmq_newrelic_cluster_name: "payments-rabbitmq"
         rabbitmq_newrelic_labels:
