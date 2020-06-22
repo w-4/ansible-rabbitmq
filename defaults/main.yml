@@ -1,9 +1,9 @@
 ---
 
-# Take the package given by the OS/distrib
+# Take the package given by the OS/distrib (Debian-like only)
 rabbitmq_os_package: false
 
-# Allways install RabbitMQ,
+# Always install RabbitMQ,
 # unless it's already installed and you don't want it to be replaced
 rabbitmq_install_enabled: true
 
