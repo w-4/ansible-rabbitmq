@@ -85,5 +85,8 @@
     user={{ item.key }}
     password={{ item.value }}
     tags={{ rabbitmq_administrator_tag }}
+    configure_priv=.*
+    read_priv=.*
+    write_priv=.*
     state=present
   with_items: "{{ rabbitmq_users | dict2items }}"
