@@ -3,7 +3,7 @@
   set_fact:
     rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
   run_once: true
-  delegate_to: ansible_play_hosts_all[0]
+  delegate_to: ansible_play_hosts[0]
   when: rabbitmq_erlang_cookie is undefined
 
 - block:
@@ -23,18 +23,31 @@
 
   - name: stop rabbitmq app
     command: rabbitmqctl stop_app
-    when: "inventory_hostname != ansible_play_hosts_all[0]"
+    when: "inventory_hostname != ansible_play_hosts[0]"
+
+  - name: reset rabbitmq before entering cluster
+    command: rabbitmqctl reset
+    when: "inventory_hostname != ansible_play_hosts[0]"
 
   - name: join rabbitmq cluster
-    command: rabbitmqctl join_cluster "rabbit@{{ ansible_play_hosts_all[0] }}"
+    command: rabbitmqctl join_cluster "rabbit@{{ ansible_play_hosts[0] }}"
     register: cluster_joined
-    when: "inventory_hostname != ansible_play_hosts_all[0]"
+    when: "inventory_hostname != ansible_play_hosts[0]"
     retries: 2
     delay: 5
 
   - name: start rabbitmq app
     command: rabbitmqctl start_app
-    when: "inventory_hostname != ansible_play_hosts_all[0]"
+    when: "inventory_hostname != ansible_play_hosts[0]"
+
+  - name: set rabbitmq cluster name
+    rabbitmq_global_parameter:
+      name: cluster_name
+      value: "{{ rabbitmq_clustering_cluster_name | to_json }}"
+      state: present
+    when:
+      - rabbitmq_clustering_cluster_name is defined
+      - rabbitmq_clustering_cluster_name | default(None, true) != None
 
   when:
     - rabbitmq_clustering_enabled

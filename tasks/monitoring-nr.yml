@@ -37,7 +37,15 @@
     when:
       - rabbitmq_clustering_enabled is defined
       - rabbitmq_clustering_enabled
-      - "inventory_hostname != ansible_play_hosts_all[0]"
+      - "inventory_hostname != ansible_play_hosts[0]"
+
+  - name: ensure monitoring user exists
+    rabbitmq_users:
+      user={{ rabbitmq_newrelic_username }}
+      password={{ rabbitmq_newrelic_password }}
+      tags={{ rabbitmq_administrator_tag }}
+      read_priv=.*
+      state=present
 
   - name: configure nri-rabbitmq
     template:

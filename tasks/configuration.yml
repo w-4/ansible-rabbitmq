@@ -71,8 +71,8 @@
     daemon_reload: true #changed systemd conf file
     state: started
 
-# - name: ensure rabbitmq app is started
-#   command: rabbitmqctl start_app
+- name: ensure rabbitmq app is started so we can interact with rabbit
+  command: rabbitmqctl start_app
 
 - name: ensure the users are removed
   rabbitmq_user:

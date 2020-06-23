@@ -1,10 +1,10 @@
 integration_name: com.newrelic.rabbitmq
 
 instances:
-  - name: {{ rabbitmq_newrelic_cluster_name }}
+  - name: {{ rabbitmq_newrelic_cluster_name | default(inventory_hostname)}}
     command: {{ rabbitmq_newrelic_command }}
     arguments:
-      hostname: {{ rabbitmq_newrelic_hostname }}
+      hostname: localhost
       username: {{ rabbitmq_newrelic_username }}
       password: {{ rabbitmq_newrelic_password }}
       config_path: {{ rabbitmq_newrelic_config_path }}
