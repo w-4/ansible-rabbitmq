@@ -80,7 +80,7 @@ rabbitmq_newrelic_hostname: "localhost"
 rabbitmq_newrelic_port: 15672
 rabbitmq_newrelic_use_ssl: false
 rabbitmq_newrelic_username: "monitoring"
-rabbitmq_newrelic_password: lookup('password', '/dev/null length=16 chars=ascii_letters,digits')
+rabbitmq_newrelic_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
 rabbitmq_newrelic_config_path: "{{ rabbitmq_config_file_path }}"
 rabbitmq_newrelic_queues:
 rabbitmq_newrelic_exchanges:
