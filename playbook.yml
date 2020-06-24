@@ -38,7 +38,7 @@
         rabbitmq_conf_vm_memory_high_watermark: 0.7
         rabbitmq_conf_num_acceptors_tcp: 100
         rabbitmq_newrelic_agent_enabled: true
-        rabbitmq_newrelic_cluster_name: {{ rabbitmq_clustering_cluster_name }}
+        rabbitmq_newrelic_cluster_name: "{{ rabbitmq_clustering_cluster_name }}"
         rabbitmq_newrelic_labels:
           env: test-payments-clustered
           role: rabbitmq

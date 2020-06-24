@@ -40,7 +40,7 @@
       - "inventory_hostname != ansible_play_hosts[0]"
 
   - name: ensure monitoring user exists
-    rabbitmq_users:
+    rabbitmq_user:
       user={{ rabbitmq_newrelic_username }}
       password={{ rabbitmq_newrelic_password }}
       tags={{ rabbitmq_administrator_tag }}
