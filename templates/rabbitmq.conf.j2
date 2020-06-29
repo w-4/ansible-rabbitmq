@@ -14,7 +14,7 @@ num_acceptors.tcp = {{ rabbitmq_conf_num_acceptors_tcp | default("10")}}
 ## Security, Access Control
 ## ==============
 loopback_users.guest = true
-loopback_users.monitoring = true
+loopback_users.{{ rabbitmq_newrelic_username }} = true
 
 ##
 ## Resource Limits & Flow Control
