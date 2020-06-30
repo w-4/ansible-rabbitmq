@@ -13,7 +13,6 @@ num_acceptors.tcp = {{ rabbitmq_conf_num_acceptors_tcp | default("10")}}
 ##
 ## Security, Access Control
 ## ==============
-loopback_users.guest = true
 loopback_users.{{ rabbitmq_newrelic_username }} = true
 
 ##
@@ -25,4 +24,12 @@ disk_free_limit.relative = {{ rabbitmq_conf_disk_free_limit_mem_relative }}
 ##
 ## Log Level
 ## =====================
-log.default.level = warning
+log.file.level = {{ rabbitmq_default_loglevel | default("warning")}}
+
+##
+## Adicional settings
+## =====================
+## setting = value
+{% for setting, value in (rabbitmq_conf_extra_settings | default({}, true)).items() %}
+{{ setting }} = {{ value }}
+{% endfor %}

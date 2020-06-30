@@ -1,4 +1,13 @@
 ---
+
+- name: review rabbitmq home permission
+  file:
+    state=directory
+    path={{ rabbitmq_home_path }}
+    owner=rabbitmq
+    group=rabbitmq
+    recurse=yes
+
 - name: change enabled_plugins file permissions
   file:
     state=touch
@@ -33,8 +42,6 @@
   when:
     - rabbitmq_clustering_enabled is defined
     - rabbitmq_clustering_enabled
-
-- debug: var=rabbitmq_conf_env
 
 - name: generate rabbitmq environment-variables file
   template:

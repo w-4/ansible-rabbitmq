@@ -7,3 +7,8 @@
 
 - name: start rabbitmq app
   command: rabbitmqctl start_app
+
+- name: restart newrelic-infra
+  service:
+    name: newrelic-infra
+    state: restarted

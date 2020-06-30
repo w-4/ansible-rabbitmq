@@ -48,6 +48,8 @@ rabbitmq_users_remove:
 rabbitmq_users:
   rabbitmq-admin: "{{ lookup('env', 'RABBITMQ_ADMIN_PASSWORD' ) | default('rabbitmq', true) }}"
 
+rabbitmq_conf_extra_settings:
+
 rabbitmq_administrator_tag: administrator
 
 # RabbitMQ plugins
@@ -63,10 +65,11 @@ rabbitmq_plugins:
 rabbitmq_clustering_enabled: false
 rabbitmq_clustering_cluster_name: "cluster_name"
 
-rabbitmq_erlang_cookie_file_path: "/var/lib/rabbitmq/.erlang.cookie"
+rabbitmq_home_path: "/var/lib/rabbitmq/"
+rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
 # rabbitmq_master_node_inventory_hostname: "{{rabbitmq_master_node}}"
 rabbitmq_nodename_prefix: rabbit
-rabbitmq_nodename_hostname: "{{ansible_fqdn}}"
+rabbitmq_nodename_hostname: "{{ ansible_fqdn }}"
 
 # RabbitMQ repositories on satellite or katello
 # rabbitmq_repository_on_satellite:

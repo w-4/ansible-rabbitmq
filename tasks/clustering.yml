@@ -1,9 +1,10 @@
 ---
-- name: set random erlang cookie
-  set_fact:
-    rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
+- block:
+    - name: set random erlang cookie
+      set_fact:
+        rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
   run_once: true
-  delegate_to: ansible_play_hosts[0]
+  delegate_to: "{{ ansible_play_hosts[0] }}"
   when: rabbitmq_erlang_cookie is undefined
 
 - block:
@@ -21,23 +22,27 @@
       name: rabbitmq-server
       state: restarted
 
-  - name: stop rabbitmq app
-    command: rabbitmqctl stop_app
-    when: "inventory_hostname != ansible_play_hosts[0]"
+  - block:
+    - name: stop rabbitmq app
+      command: rabbitmqctl stop_app
 
-  - name: reset rabbitmq before entering cluster
-    command: rabbitmqctl reset
-    when: "inventory_hostname != ansible_play_hosts[0]"
+    - name: reset rabbitmq before entering cluster
+      command: rabbitmqctl reset
 
-  - name: join rabbitmq cluster
-    command: rabbitmqctl join_cluster "rabbit@{{ ansible_play_hosts[0] }}"
-    register: cluster_joined
-    when: "inventory_hostname != ansible_play_hosts[0]"
-    retries: 2
-    delay: 5
+    - name: force forget cluster node on 'master'
+      command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname }}"
+      delegate_to: "{{ ansible_play_hosts[0] }}"
+      ignore_errors: True
 
-  - name: start rabbitmq app
-    command: rabbitmqctl start_app
+    - name: join rabbitmq cluster
+      command: rabbitmqctl join_cluster "rabbit@{{ ansible_play_hosts[0] }}"
+      register: cluster_joined
+      retries: 2
+      delay: 5
+
+    - name: start rabbitmq app
+      command: rabbitmqctl start_app
+
     when: "inventory_hostname != ansible_play_hosts[0]"
 
   - name: set rabbitmq cluster name
@@ -51,4 +56,3 @@
 
   when:
     - rabbitmq_clustering_enabled
-

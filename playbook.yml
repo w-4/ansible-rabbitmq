@@ -18,9 +18,9 @@
             shrink: false
             resizefs: true
             mount: true
-            mount_point_path: /var/lib/rabbitmq
-            mount_point_owner: root
-            mount_point_group: root
+            mount_point_path: {{ rabbitmq_home_path }}
+            mount_point_owner: rabbitmq
+            mount_point_group: rabbitmq
             mount_point_opts: defaults
             state: present
 

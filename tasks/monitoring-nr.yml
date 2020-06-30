@@ -29,28 +29,49 @@
         exchanges_regexes: "{{ rabbitmq_newrelic_exchanges | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
         vhosts_regexes: "{{ rabbitmq_newrelic_vhosts | ternary(omit, '[\".*\"]', '[\".*\"]') }}"
 
-  ## In cluster environments, only one node should use the all command; the rest should use the inventory command.
-  ## ref: https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/rabbitmq-monitoring-integration#config
-  - name: force newrelic rabbitmq agent command as inventory
-    set_fact:
-      rabbitmq_newrelic_command: "inventory"
+  - block:
+    - name: force newrelic rabbitmq agent command as inventory
+      ## In cluster environments, only one node should use the all command; the rest should use the inventory command.
+      ## ref: https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/rabbitmq-monitoring-integration#config
+      set_fact:
+        rabbitmq_newrelic_command: "inventory"
+      when: "inventory_hostname != ansible_play_hosts[0]"
+
+    - name: specific monitoring setting for cluster mode
+      block:
+        - name: reset newrelic monitoring password
+          set_fact:
+            rabbitmq_newrelic_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
+
+        - name: ensure monitoring user exists
+          rabbitmq_user:
+            user={{ rabbitmq_newrelic_username }}
+            password={{ rabbitmq_newrelic_password }}
+            read_priv=.*
+            state=present
+            tags={{ rabbitmq_administrator_tag }}
+            update_password=always
+      run_once: true
+      delegate_to: "{{ ansible_play_hosts[0] }}"
     when:
       - rabbitmq_clustering_enabled is defined
       - rabbitmq_clustering_enabled
-      - "inventory_hostname != ansible_play_hosts[0]"
 
   - name: ensure monitoring user exists
     rabbitmq_user:
       user={{ rabbitmq_newrelic_username }}
       password={{ rabbitmq_newrelic_password }}
-      tags={{ rabbitmq_administrator_tag }}
       read_priv=.*
+      tags={{ rabbitmq_administrator_tag }}
       state=present
+    when: not rabbitmq_clustering_enabled
 
   - name: configure nri-rabbitmq
     template:
       src=newrelic-rabbitmq-config.yml.j2
       dest={{ rabbitmq_newrelic_agent_config_file_path }}
       backup=yes
+    notify: restart newrelic-infra
+
 
   tags: rabbitmq_monitoring
