@@ -1,0 +1,5 @@
+---
+- name: Converge queue service clustered
+  hosts: all
+  roles:
+    - role: ansible-rabbitmq

@@ -1,5 +1,4 @@
 ---
-
 # Take the package given by the OS/distrib (Debian-like only)
 rabbitmq_os_package: false
 
@@ -13,24 +12,20 @@ rabbitmq_minor: 8
 rabbitmq_patch: 5
 rabbitmq_suffix: 1
 rabbitmq_release: "*"
-rabbitmq_version: "{{rabbitmq_major}}.{{rabbitmq_minor}}.{{rabbitmq_patch}}"
-rabbitmq_package: "{{rabbitmq_version}}-{{rabbitmq_suffix}}"
+rabbitmq_version: "{{ rabbitmq_major }}.{{ rabbitmq_minor }}.{{ rabbitmq_patch }}"
+rabbitmq_package: "{{ rabbitmq_version }}-{{ rabbitmq_suffix }}"
 
 # TCP configuration
-rabbitmq_conf_tcp_listeners_address: ''
+rabbitmq_conf_tcp_listeners_address: ""
 rabbitmq_conf_tcp_listeners_port: 5672
 
 # RabbitMQ configuration
-rabbitmq_enabled_plugins_file_path: "/etc/rabbitmq/enabled_plugins"
-rabbitmq_enabled_plugins_file_owner: root
-rabbitmq_enabled_plugins_file_group: rabbitmq
-rabbitmq_enabled_plugins_file_mode: 0644
-
-rabbitmq_config_file_path: "/etc/rabbitmq/rabbitmq.conf"
-rabbitmq_env_variables_file_path: "/etc/rabbitmq/rabbitmq-env.conf"
-rabbitmq_config_file_owner: root
-rabbitmq_config_file_group: rabbitmq
-rabbitmq_config_file_mode: 0644
+rabbitmq_owner: rabbitmq
+rabbitmq_group: rabbitmq
+rabbitmq_home_path: /var/lib/rabbitmq/
+rabbitmq_enabled_plugins_file_path: /etc/rabbitmq/enabled_plugins
+rabbitmq_config_file_path: /etc/rabbitmq/rabbitmq.conf
+rabbitmq_env_variables_file_path: /etc/rabbitmq/rabbitmq-env.conf
 
 # Variables can be overriden to adapt to the user case
 rabbitmq_conf_disk_free_limit_mem_relative: 1.5
@@ -49,40 +44,39 @@ rabbitmq_users:
   rabbitmq-admin: "{{ lookup('env', 'RABBITMQ_ADMIN_PASSWORD' ) | default('rabbitmq', true) }}"
 
 rabbitmq_conf_extra_settings:
-
 rabbitmq_administrator_tag: administrator
 
 # RabbitMQ plugins
-rabbitmq_bin_path: "/usr/lib/rabbitmq/bin"
-rabbitmq_sbin_path: "/usr/lib/rabbitmq/sbin"
-rabbitmq_plugins_prefix_path: "/usr/lib/rabbitmq"
+rabbitmq_bin_path: /usr/lib/rabbitmq/bin
+rabbitmq_sbin_path: /usr/lib/rabbitmq/sbin
+rabbitmq_plugins_prefix_path: /usr/lib/rabbitmq
 rabbitmq_plugins:
   - rabbitmq_management
   - rabbitmq_shovel
   - rabbitmq_shovel_management
 
 # RabbitMQ cluster
+rabbitmq_erlang_cookie: ""
 rabbitmq_clustering_enabled: false
-rabbitmq_clustering_cluster_name:
-
-rabbitmq_home_path: "/var/lib/rabbitmq/"
+rabbitmq_clustering_cluster_name: ""
 rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
-# rabbitmq_master_node_inventory_hostname: "{{rabbitmq_master_node}}"
+
+rabbitmq_inventory_hostgroup: rabbitmq
 rabbitmq_nodename_prefix: rabbit
-rabbitmq_nodename_hostname: "{{ ansible_fqdn }}"
+rabbitmq_nodename: "{{ ansible_fqdn }}"
+rabbitmq_nodes_list: "{{ groups[rabbitmq_inventory_hostgroup] | map('extract', hostvars, ['ansible_host']) | list }}"
+rabbitmq_master_node: "{{ rabbitmq_nodes_list[0] }}"
 
 # RabbitMQ repositories on satellite or katello
-# rabbitmq_repository_on_satellite:
-#   - Stone_RabbitMQ_erlang_rhel7
-#   - Stone_RabbitMQ_38_rhel7
+rabbitmq_repository_on_satellite: []
 
 rabbitmq_newrelic_agent_enabled: false
-rabbitmq_newrelic_agent_config_file_path: "/etc/newrelic-infra/integrations.d/rabbitmq-config.yml"
-rabbitmq_newrelic_command: "all"
-rabbitmq_newrelic_hostname: "localhost"
+rabbitmq_newrelic_agent_config_file_path: /etc/newrelic-infra/integrations.d/rabbitmq-config.yml
+rabbitmq_newrelic_command: all
+rabbitmq_newrelic_hostname: localhost
 rabbitmq_newrelic_port: 15672
 rabbitmq_newrelic_use_ssl: false
-rabbitmq_newrelic_username: "monitoring"
+rabbitmq_newrelic_username: monitoring
 rabbitmq_newrelic_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
 rabbitmq_newrelic_config_path: "{{ rabbitmq_config_file_path }}"
 rabbitmq_newrelic_queues:

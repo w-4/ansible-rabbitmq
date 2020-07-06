@@ -1,6 +1,10 @@
 ---
+- name: daemon reload
+  service:
+    name: rabbitmq-server
+    daemon_reload: true
 
-- name: rabbitmq restart
+- name: restart rabbitmq
   service:
     name: rabbitmq-server
     state: restarted

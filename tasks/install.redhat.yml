@@ -4,57 +4,64 @@
     name: "{{ item }}"
     state: enabled
   with_items: "{{ rabbitmq_repository_on_satellite }}"
-  when: rabbitmq_repository_on_satellite is defined
+  when: rabbitmq_repository_on_satellite | length > 0
 
-- block:
-  - name: add package-cloud rabbitmq-erlang rpm key
-    rpm_key:
-      key: https://packagecloud.io/rabbitmq/erlang/gpgkey
-      state: present
+- name: Task block to install RabbitMQ without satellite
+  block:
+    - name: Add package-cloud rabbitmq-erlang rpm key
+      rpm_key:
+        key: https://packagecloud.io/rabbitmq/erlang/gpgkey
+        state: present
 
-  - name: add package-cloud rabbitmq-server rpm key
-    rpm_key:
-      key: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
-      state: present
+    - name: Add package-cloud rabbitmq-server rpm key
+      rpm_key:
+        key: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+        state: present
 
-  - name: add package-cloud rabbitmq-erlang repo
-    yum_repository:
+    - name: Add package-cloud rabbitmq-erlang repo
+      yum_repository:
         name: rabbitmq_erlang
-        enabled: yes
-        repo_gpgcheck: yes
-        sslverify: yes
+        enabled: true
+        repo_gpgcheck: true
+        sslverify: true
         gpgkey: https://packagecloud.io/rabbitmq/erlang/gpgkey
         state: present
-        gpgcheck: no
-        metadata_expire: 300
+        gpgcheck: false
+        metadata_expire: "300"
         baseurl: https://packagecloud.io/rabbitmq/erlang/el/$releasever/$basearch
         description: RabbitMQ-Erlang Repo
 
-  - name: add package-cloud rabbitmq-server repo
-    yum_repository:
+    - name: Add package-cloud rabbitmq-server repo
+      yum_repository:
         name: rabbitmq_rabbitmq-server
-        enabled: yes
-        repo_gpgcheck: yes
-        sslverify: yes
+        enabled: true
+        repo_gpgcheck: true
+        sslverify: true
         gpgkey: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
         state: present
-        gpgcheck: no
-        metadata_expire: 300
+        gpgcheck: false
+        metadata_expire: "300"
         baseurl: https://packagecloud.io/rabbitmq/rabbitmq-server/el/$releasever/$basearch
         description: RabbitMQ-Server Repo
-  when: rabbitmq_repository_on_satellite is undefined
+  when: rabbitmq_repository_on_satellite | length == 0
 
-- name: install rabbitmq-server dependencies (RedHat)
-  package:
-    name: ['libselinux-python']
+- name: Install rabbitmq-server dependencies (RedHat)
+  yum:
+    name: libselinux-python
     state: present
 
-- name: install rabbitmq-server {{ rabbitmq_version }}
-  package:
+- name: Install rabbitmq-server {{ rabbitmq_version }}
+  yum:
     name: "rabbitmq-server-{{ rabbitmq_package }}.el7.noarch"
     state: present
 
-- name: enable rabbitmq-server to survive reboot
+- name: Ensure rabbitmq server is started and enabled
   service:
     name: rabbitmq-server
-    enabled: yes
+    state: started
+    enabled: true
+  register: rabbitmq_service
+
+- name: Ensure rabbitmq app is started so we can interact with rabbit
+  command: rabbitmqctl start_app
+  when: rabbitmq_service is changed

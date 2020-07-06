@@ -1,99 +1,92 @@
 ---
-
-- name: review rabbitmq home permission
+- name: Review rabbitmq home permission
   file:
-    state=directory
-    path={{ rabbitmq_home_path }}
-    owner=rabbitmq
-    group=rabbitmq
-    recurse=yes
+    state: directory
+    path: "{{ rabbitmq_home_path }}"
+    owner: "{{ rabbitmq_owner }}"
+    group: "{{ rabbitmq_group }}"
+    recurse: true
 
-- name: change enabled_plugins file permissions
+- name: Change enabled_plugins file permissions
   file:
-    state=touch
-    path={{ rabbitmq_enabled_plugins_file_path }}
-    owner={{ rabbitmq_enabled_plugins_file_owner }}
-    group={{ rabbitmq_enabled_plugins_file_group }}
-    mode={{ rabbitmq_enabled_plugins_file_mode }}
-  changed_when: false
+    state: touch
+    path: "{{ rabbitmq_enabled_plugins_file_path }}"
+    owner: "{{ rabbitmq_owner }}"
+    group: "{{ rabbitmq_group }}"
+    mode: "0644"
+    modification_time: preserve
+    access_time: preserve
 
 - name: Check if rabbitmq_conf_vm_memory_high_watermark is under the recommended range
   fail:
     msg: "The recommended vm_memory_high_watermark range is 0.4 to 0.7."
   when: rabbitmq_conf_vm_memory_high_watermark < 0.4 or rabbitmq_conf_vm_memory_high_watermark > 0.7
 
-- name: copy the rabbitmq configuration file
+- name: Copy the rabbitmq configuration file
   template:
-    src=rabbitmq.conf.j2
-    dest={{ rabbitmq_config_file_path }}
-    owner={{ rabbitmq_config_file_owner }}
-    group={{ rabbitmq_config_file_group }}
-    mode={{ rabbitmq_config_file_mode }}
-    backup=yes
+    src: rabbitmq.conf.j2
+    dest: "{{ rabbitmq_config_file_path }}"
+    owner: "{{ rabbitmq_owner }}"
+    group: "{{ rabbitmq_group }}"
+    mode: "0644"
+    backup: true
+  notify: restart rabbitmq
 
-- block:
-  - set_fact:
-      additional_env:
-        USE_LONGNAME: true
-
-  - name: force longnames when rabbit is in cluster
-    set_fact:
-      rabbitmq_conf_env: "{{ rabbitmq_conf_env | default({}) | combine(additional_env) }}"
-  when:
-    - rabbitmq_clustering_enabled is defined
-    - rabbitmq_clustering_enabled
-
-- name: generate rabbitmq environment-variables file
-  template:
-    src=rabbitmq-env.conf.j2
-    dest={{ rabbitmq_env_variables_file_path }}
-    owner={{ rabbitmq_config_file_owner }}
-    group={{ rabbitmq_config_file_group }}
-    mode={{ rabbitmq_config_file_mode }}
-    backup=yes
-  when: rabbitmq_conf_env is defined
-
-- name: alter number of system's open file if rabbitmq_system_number_open_files is set
+- name: Task block to force longnames when rabbit is in cluster
   block:
-    - name: check if value is under 500k
-      fail:
-        msg: "The number of open files in the system should not exceed 500K."
-      when: rabbitmq_system_number_open_files > 500000
+    - set_fact:
+        additional_env:
+          USE_LONGNAME: true
 
-    - name: make sure service.d exists
+    - name: Force longnames when rabbit is in cluster
+      set_fact:
+        rabbitmq_conf_env: "{{ rabbitmq_conf_env | default({}) | combine(additional_env) }}"
+  when: rabbitmq_clustering_enabled
+
+- name: Generate rabbitmq environment-variables file
+  template:
+    src: rabbitmq-env.conf.j2
+    dest: "{{ rabbitmq_env_variables_file_path }}"
+    owner: "{{ rabbitmq_owner }}"
+    group: "{{ rabbitmq_group }}"
+    mode: "0644"
+    backup: true
+  when: rabbitmq_conf_env is defined
+  notify: restart rabbitmq
+
+- name: Task block alter number of system's open file if rabbitmq_system_number_open_files is set
+  block:
+    - name: Make sure service.d exists
       file:
         path: "{{ rabbitmq_service_d_path }}"
         state: directory
 
-    - name: change limit of system's number of open file
+    - name: Change limit of system's number of open file
       template:
         src: limits.conf.j2
         dest: "{{ rabbitmq_service_d_path }}/limits.conf"
         backup: true
-  when: rabbitmq_system_number_open_files is defined
+      notify:
+        - daemon reload
+        - restart rabbitmq
+  when: rabbitmq_system_number_open_files == 500000
 
-- name: ensure rabbitmq server is running
-  service:
-    name: rabbitmq-server
-    daemon_reload: true #changed systemd conf file
-    state: started
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers
 
-- name: ensure rabbitmq app is started so we can interact with rabbit
-  command: rabbitmqctl start_app
-
-- name: ensure the users are removed
+- name: Ensure the users are removed
   rabbitmq_user:
-    user={{ item }}
-    state=absent
+    user: "{{ item }}"
+    state: absent
   with_items: "{{ rabbitmq_users_remove }}"
 
-- name: ensure users exist
+- name: Ensure users exist
   rabbitmq_user:
-    user={{ item.key }}
-    password={{ item.value }}
-    tags={{ rabbitmq_administrator_tag }}
-    configure_priv=.*
-    read_priv=.*
-    write_priv=.*
-    state=present
+    user: "{{ item.key }}"
+    password: "{{ item.value }}"
+    tags: "{{ rabbitmq_administrator_tag }}"
+    configure_priv: ".*"
+    read_priv: ".*"
+    write_priv: ".*"
+    state: present
   with_items: "{{ rabbitmq_users | dict2items }}"

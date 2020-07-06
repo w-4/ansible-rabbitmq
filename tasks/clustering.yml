@@ -1,6 +1,6 @@
 ---
 - block:
-  - name: check if cluster is enabled and cluster_name
+  - name: Check if cluster has to be enabled and cluster_name is defined
     assert:
       that:
         - rabbitmq_clustering_enabled
@@ -8,66 +8,60 @@
         - rabbitmq_clustering_cluster_name | default('', true) | length > 4
       fail_msg: "When using cluster a cluster_name must be set with at least 5 chars"
 
-  - name: set dynamic group name
+  - name: Set dynamic group name
     set_fact:
       cluster_group_name: "rmq_cluster_{{ rabbitmq_clustering_cluster_name }}"
 
-  - name: set dynamic group based on cluster_name
+  - name: Set dynamic group based on cluster_name
     group_by:
       key: "{{ cluster_group_name }}"
 
   - debug:
-      var: groups[cluster_group_name][0]
+      var: groups[cluster_group_name]
 
-  - name: set random erlang cookie
+  - name: Set random erlang cookie
     set_fact:
       rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
     run_once: true
     delegate_to: "{{ groups[cluster_group_name][0] }}"
-    when: rabbitmq_erlang_cookie is undefined
+    when: (rabbitmq_erlang_cookie is undefined) or (rabbitmq_erlang_cookie | default(None, true) == None)
 
-  - name: copy erlang cookie
+  - name: Copy erlang cookie
     template:
       src: erlang.cookie.j2
       dest: "{{ rabbitmq_erlang_cookie_file_path }}"
       owner: rabbitmq
       group: rabbitmq
-      mode: 0400
-      backup: yes
-
-  - name: restart rabbitmq server
-    service:
-      name: rabbitmq-server
-      state: restarted
+      mode: "0400"
+      backup: true
+    notify: restart rabbitmq
 
   - block:
-    - name: stop rabbitmq app
+    - name: Stop rabbitmq app
       command: rabbitmqctl stop_app
 
-    - name: reset rabbitmq before entering cluster
+    - name: Reset rabbitmq before entering cluster
       command: rabbitmqctl reset
 
-    - name: force forget cluster node on 'master'
+    - name: Force forget cluster node on 'master'
       command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname }}"
       delegate_to: "{{ groups[cluster_group_name][0] }}"
       ignore_errors: True
 
-    - name: join rabbitmq cluster
+    - name: Join rabbitmq cluster
       command: rabbitmqctl join_cluster "rabbit@{{ groups[cluster_group_name][0] }}"
       register: cluster_joined
       retries: 2
       delay: 5
 
-    - name: start rabbitmq app
+    - name: Start rabbitmq app
       command: rabbitmqctl start_app
+  when: "inventory_hostname != groups[cluster_group_name][0]"
 
-    when: "inventory_hostname != groups[cluster_group_name][0]"
-
-  - name: set rabbitmq cluster name
+  - name: Set rabbitmq cluster name
     rabbitmq_global_parameter:
       name: cluster_name
       value: "{{ rabbitmq_clustering_cluster_name | to_json }}"
       state: present
   tags:
     - rabbitmq_clustering
-

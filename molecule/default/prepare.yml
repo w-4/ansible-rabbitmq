@@ -1,22 +1,17 @@
 ---
 - name: Prepare
   hosts: all
-  gather_facts: false
   tasks:
     - name: Install python for Ansible
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-      become: true
       changed_when: false
-    
-    - name: install epel-release
-      become: true
-      yum:
-        name: epel-release
-        state: present
 
-    - name: install netstat (required by testinfra)
-      become: true
-      become_user: root
-      yum:
+    - name: Install epel-release
+      include_role:
+        name: stone-payments.epel
+      when: ansible_os_family == "RedHat"
+
+    - name: Install netstat (required by testinfra)
+      package:
         name: net-tools
         state: present

@@ -10,10 +10,11 @@ ansible-lint = "*"
 flake8 = "*"
 yamllint = "*"
 testinfra = "*"
+docker = "*"
 
 [packages]
-ansible = "~=2.9.0"
+ansible = "*"
 netaddr = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"
