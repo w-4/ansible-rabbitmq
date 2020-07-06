@@ -10,16 +10,16 @@
   include_tasks: configuration.yml
   tags: rabbitmq_configuration
 
-# - name: Install plugins
-#   include_tasks: plugins.yml
-#   tags: rabbitmq_plugins
+- name: Install plugins
+  include_tasks: plugins.yml
+  tags: rabbitmq_plugins
 
-# - name: Configure cluster
-#   include_tasks: clustering.yml
-#   when: rabbitmq_clustering_enabled
-#   tags: rabbitmq_clustering
+- name: Configure cluster
+  include_tasks: clustering.yml
+  when: rabbitmq_clustering_enabled
+  tags: rabbitmq_clustering
 
-# - name: Configure new-relic rabbitmq infra agent
-#   include_tasks: monitoring-newrelic.yml
-#   when: rabbitmq_newrelic_agent_enabled
-#   tags: rabbitmq_monitoring
+- name: Configure new-relic rabbitmq infra agent
+  include_tasks: monitoring-newrelic.yml
+  when: rabbitmq_newrelic_agent_enabled
+  tags: rabbitmq_monitoring
