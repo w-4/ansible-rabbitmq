@@ -1,53 +1,64 @@
 ---
 dependency:
   name: galaxy
-driver:
-  name: vagrant
-  provider:
-    name: virtualbox
-lint:
-  name: yamllint
   options:
-    config-file: yamllint-config.yaml
+    role-file: roles/requirements.yml
+driver:
+  name: docker
+lint: |
+  yamllint .
+  ansible-lint
+  flake8
 platforms:
-  - name: clustered-01
-    box: centos/7
-    provider_name: virtualbox
-    provider_memory: 512
-    provider_cpus: 1
-    ansible_groups:
-        - group2
-    interfaces:
-      - network_name: private_network
-        type: static
-        ip: 1.2.3.4
-        auto_config: true
-    instance_raw_config_args:
-      - "vm.network 'forwarded_port', guest: 15672, host: 15672"
-  - name: clustered-02
-    box: centos/7
-    provider_name: virtualbox
-    provider_memory: 512
-    provider_cpus: 1
-    ansible_groups:
-        - group2
-    interfaces:
-      - network_name: private_network
-        type: static
-        ip: 1.2.3.5
-        auto_config: true
+  - name: rabbit01
+    image: centos/systemd
+    command: /usr/sbin/init
+    pre_build_image: true
+    privileged: true
+    capabilities:
+      - SYS_ADMIN
+    exposed_ports:
+      - 15672/tcp
+      - 5672/tcp
+    published_ports:
+      - 0.0.0.0:15672:15672/tcp
+      - 0.0.0.0:5672:5672/tcp
+    environment:
+      container: docker
+    tty: true
+    dns_servers:
+      - 8.8.8.8
+    network_mode: host
+    purge_networks: true
+    group:
+      - rabbitmq
+
+  - name: rabbit02
+    image: centos/systemd
+    command: /usr/sbin/init
+    pre_build_image: true
+    privileged: true
+    capabilities:
+      - SYS_ADMIN
+    exposed_ports:
+      - 15672/tcp
+      - 5672/tcp
+    published_ports:
+      - 0.0.0.0:15672:15672/tcp
+      - 0.0.0.0:5672:5672/tcp
+    environment:
+      container: docker
+    tty: true
+    dns_servers:
+      - 8.8.8.8
+    network_mode: host
+    purge_networks: true
+    group:
+      - rabbitmq
 provisioner:
   name: ansible
-  playbooks:
-    converge: playbook.yml
-  lint:
-    name: ansible-lint
 scenario:
   name: clustered
 verifier:
   name: testinfra
-  directory: ../../tests
-  additional_files_or_dirs : 
-    - ../../../tests/test_*.py
-  lint:
-    name: flake8
+  directory: ../../tests/default
