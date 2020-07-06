@@ -1,58 +1,48 @@
 ---
-- block:
-    - name: set random erlang cookie
-      set_fact:
-        rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
+- name: Set random erlang cookie
+  set_fact:
+    rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
   run_once: true
   delegate_to: "{{ ansible_play_hosts[0] }}"
-  when: rabbitmq_erlang_cookie is undefined
+  when: rabbitmq_erlang_cookie | lenth > 0
+
+- name: Copy erlang cookie
+  template:
+    src: erlang.cookie.j2
+    dest: "{{ rabbitmq_erlang_cookie_file_path }}"
+    owner: rabbitmq
+    group: rabbitmq
+    mode: "0400"
+    backup: true
+  notify: restart rabbitmq
 
 - block:
-  - name: copy erlang cookie
-    template:
-      src: erlang.cookie.j2
-      dest: "{{ rabbitmq_erlang_cookie_file_path }}"
-      owner: rabbitmq
-      group: rabbitmq
-      mode: 0400
-      backup: yes
-
-  - name: restart rabbitmq server
-    service:
-      name: rabbitmq-server
-      state: restarted
-
-  - block:
-    - name: stop rabbitmq app
+    - name: Stop rabbitmq app
       command: rabbitmqctl stop_app
 
-    - name: reset rabbitmq before entering cluster
+    - name: Reset rabbitmq before entering cluster
       command: rabbitmqctl reset
 
-    - name: force forget cluster node on 'master'
+    - name: Force forget cluster node on 'master'
       command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname }}"
       delegate_to: "{{ ansible_play_hosts[0] }}"
-      ignore_errors: True
+      ignore_errors: true
 
-    - name: join rabbitmq cluster
+    - name: Join rabbitmq cluster
       command: rabbitmqctl join_cluster "rabbit@{{ ansible_play_hosts[0] }}"
       register: cluster_joined
       retries: 2
       delay: 5
 
-    - name: start rabbitmq app
+    - name: Start rabbitmq app
       command: rabbitmqctl start_app
+  when: "inventory_hostname != ansible_play_hosts[0]"
 
-    when: "inventory_hostname != ansible_play_hosts[0]"
-
-  - name: set rabbitmq cluster name
-    rabbitmq_global_parameter:
-      name: cluster_name
-      value: "{{ rabbitmq_clustering_cluster_name | to_json }}"
-      state: present
-    when:
-      - rabbitmq_clustering_cluster_name is defined
-      - rabbitmq_clustering_cluster_name | default(None, true) != None
-
+- name: Set rabbitmq cluster name
+  rabbitmq_global_parameter:
+    name: cluster_name
+    value: "{{ rabbitmq_clustering_cluster_name | to_json }}"
+    state: present
   when:
-    - rabbitmq_clustering_enabled
+    - rabbitmq_clustering_cluster_name | length > 0
+    - rabbitmq_clustering_cluster_name | default(None, true) != None
