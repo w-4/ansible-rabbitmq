@@ -1,5 +1,12 @@
 ---
 - block:
+  - name: check if cluster is enabled and cluster_name
+    assert:
+      that:
+        - rabbitmq_clustering_enabled
+        - rabbitmq_clustering_cluster_name is defined
+        - rabbitmq_clustering_cluster_name | default('', true) | length > 4
+      fail_msg: "When using cluster a cluster_name must be set with at least 5 chars"
     - name: set random erlang cookie
       set_fact:
         rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"

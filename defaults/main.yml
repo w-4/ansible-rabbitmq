@@ -63,7 +63,7 @@ rabbitmq_plugins:
 
 # RabbitMQ cluster
 rabbitmq_clustering_enabled: false
-rabbitmq_clustering_cluster_name: "cluster_name"
+rabbitmq_clustering_cluster_name:
 
 rabbitmq_home_path: "/var/lib/rabbitmq/"
 rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
