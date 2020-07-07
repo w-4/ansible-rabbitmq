@@ -89,7 +89,7 @@ rabbitmq_newrelic_hostname: localhost
 rabbitmq_newrelic_port: 15672
 rabbitmq_newrelic_use_ssl: false
 rabbitmq_newrelic_username: admin
-rabbitmq_newrelic_password: "{{ rabbitmq_users_default[rabbitmq_newrelic_username].password | default(rabbitmq_newrelic_username, true) }}"
+rabbitmq_newrelic_password: rabbitmq
 rabbitmq_newrelic_config_path: "{{ rabbitmq_config_file_path }}"
 rabbitmq_newrelic_queues:
 rabbitmq_newrelic_exchanges:
