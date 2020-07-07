@@ -4,6 +4,7 @@
     name: "{{ vhost_item.name }}"
     tracing: "{{ vhost_item.tracing | default(omit) }}"
     state: "{{ vhost_item.state | default('present') }}"
+  run_once: true
 
 - name: Manage Vhosts limit
   rabbitmq_vhost_limits:
@@ -12,3 +13,4 @@
     max_queues: "{{ vhost_item.max_queues | default(omit) }}"
     state: "{{ present if (vhost_item.set_limit is true) else absent }}"
   when: vhost_item.set_limit is defined
+  run_once: true
