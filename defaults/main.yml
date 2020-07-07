@@ -81,6 +81,7 @@ rabbitmq_manage_policies: false
 rabbitmq_policies: []
 
 # Config Newrelic to monitoring RabbitMQ
+newrelic_license:
 rabbitmq_newrelic_agent_enabled: false
 rabbitmq_newrelic_agent_config_file_path: /etc/newrelic-infra/integrations.d/rabbitmq-config.yml
 rabbitmq_newrelic_command: all

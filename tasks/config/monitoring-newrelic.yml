@@ -1,13 +1,10 @@
 ---
 - block:
-  - name: Set newrelic_license fact
-    set_fact:
-      newrelic_license: "{{ lookup('env', 'NEWRELIC_LICENSE_KEY') | default(omit, true) }}"
-
   - name: Check if license key is defined
     assert:
       that:
         - newrelic_license is defined
+        - newrelic_license | length > 0
 
   - name: Install and activate new-relic infra agent and rabbitmq agent
     include_role:
