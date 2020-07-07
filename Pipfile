@@ -6,11 +6,14 @@ verify_ssl = true
 [dev-packages]
 molecule = "*"
 python-vagrant = "*"
+molecule-vagrant = "*"
+selinux = "*"
+docker = "*"
 ansible-lint = "*"
-flake8 = "*"
 yamllint = "*"
 testinfra = "*"
-docker = "*"
+autopep8 = "*"
+flake8 = "*"
 
 [packages]
 ansible = "*"
