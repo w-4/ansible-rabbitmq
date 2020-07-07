@@ -1,10 +1,30 @@
 ---
+- name: Check if cluster has to be enabled and cluster_name is defined
+  assert:
+    that:
+      - rabbitmq_clustering_enabled
+      - rabbitmq_clustering_cluster_name | default('', true) | length > 4
+    fail_msg: "When using cluster a cluster_name must be set with at least 5 chars"
+
+- name: Set dynamic group name
+  set_fact:
+    cluster_group_name: "rmq_cluster_{{ rabbitmq_clustering_cluster_name }}"
+
+- name: Set dynamic group based on cluster_name
+  group_by:
+    key: "{{ cluster_group_name }}"
+
+- name: Show the name of frist node 
+  debug:
+    msg: "{{ groups[cluster_group_name][0] }}"
+    verbosity: 2
+
 - name: Set random erlang cookie
   set_fact:
     rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
   run_once: true
-  delegate_to: "{{ rabbitmq_master_node }}"
-  when: rabbitmq_erlang_cookie | lenth > 0
+  delegate_to: "{{ groups[cluster_group_name][0] }}"
+  when: (rabbitmq_erlang_cookie is undefined) or (rabbitmq_erlang_cookie | default(None, true) == None)
 
 - name: Copy erlang cookie
   template:
@@ -16,7 +36,8 @@
     backup: true
   notify: restart rabbitmq
 
-- block:
+- name: Task block to clear new nodes before joining to cluster
+  block:
     - name: Stop rabbitmq app
       command: rabbitmqctl stop_app
 
@@ -25,25 +46,21 @@
 
     - name: Force forget cluster node on 'master'
       command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname }}"
-      delegate_to: "{{ rabbitmq_master_node }}"
-      ignore_errors: true
+      delegate_to: "{{ groups[cluster_group_name][0] }}"
+      ignore_errors: True
 
     - name: Join rabbitmq cluster
-      command: rabbitmqctl join_cluster "rabbit@{{ rabbitmq_master_node }}"
+      command: rabbitmqctl join_cluster "rabbit@{{ groups[cluster_group_name][0] }}"
       register: cluster_joined
       retries: 2
       delay: 5
-      ignore_errors: true
 
     - name: Start rabbitmq app
       command: rabbitmqctl start_app
-  when: inventory_hostname != rabbitmq_master_node
+  when: "inventory_hostname != groups[cluster_group_name][0]"
 
 - name: Set rabbitmq cluster name
   rabbitmq_global_parameter:
     name: cluster_name
     value: "{{ rabbitmq_clustering_cluster_name | to_json }}"
     state: present
-  when:
-    - rabbitmq_clustering_cluster_name | length > 0
-    - rabbitmq_clustering_cluster_name | default(None, true) != None
