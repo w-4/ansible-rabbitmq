@@ -42,7 +42,9 @@
     - name: Force longnames when rabbit is in cluster
       set_fact:
         rabbitmq_conf_env: "{{ rabbitmq_conf_env | default({}) | combine(additional_env) }}"
-  when: rabbitmq_clustering_enabled
+  when:
+    - rabbitmq_clustering_enabled
+    - rabbitmq_conf_env is undefined
 
 - name: Generate rabbitmq environment-variables file
   template:
