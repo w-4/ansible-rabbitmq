@@ -32,14 +32,18 @@ platforms:
     purge_networks: true
     group:
       - rabbitmq
+    env:
+      LANG: "en_US.utf8"
+      LC_ALL: "en_US.utf8"
 provisioner:
   name: ansible
   inventory:
-      group_vars:
-        all:
-          rabbitmq_major: 3
-          rabbitmq_minor: 8
-          rabbitmq_patch: 5
+    group_vars:
+      all:
+        rabbitmq_major: 3
+        rabbitmq_minor: 8
+        rabbitmq_patch: 5
+        rabbitmq_repository_on_satellite: []
 scenatio:
   name: default
 verifier:

@@ -11,7 +11,9 @@
         name: stone-payments.epel
       when: ansible_os_family == "RedHat"
 
-    - name: Install netstat (required by testinfra)
-      package:
-        name: net-tools
+    - name: Install required packages
+      yum:
+        name:
+          - net-tools
+          - glibc-common
         state: present
