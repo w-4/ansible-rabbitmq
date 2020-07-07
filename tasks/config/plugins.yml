@@ -1,12 +1,17 @@
 ---
+- name: Get RabbitMQ installed plugins
+  command: rabbitmq-plugins list -e -m
+  changed_when: false
+  register: rabbitmq_installed_plugins
+
 - name: Enable plugins
   rabbitmq_plugin:
     names: "{{ item.name }}"
     state: "{{ item.state }}"
   with_items: "{{ rabbitmq_plugins }}"
-  become_user: "{{ rabbitmq_owner }}"
-  when: rabbitmq_plugins | length > 0
-  changed_when: false
+  when:
+    - rabbitmq_plugins | length > 0
+    - item.name not in rabbitmq_installed_plugins.stdout_lines
 
 - name: Force to correct enabled plugins permissions
   file:
@@ -14,4 +19,3 @@
     owner: "{{ rabbitmq_owner }}"
     group: "{{ rabbitmq_group }}"
     mode: "0644"
-  changed_when: false

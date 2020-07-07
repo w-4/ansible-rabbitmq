@@ -7,6 +7,8 @@
   rabbitmq_user:
     user: guest
     state: absent
+  no_log: true
+  run_once: true
 
 - name: Combine rabbitmq_users_default with rabbitmq_users
   set_fact:
@@ -24,4 +26,6 @@
     tags: "{{ item.tags | default(omit) }}"
     state: "{{ item.state | default('present') }}"
     update_password: "{{ item.update_password | default('always') }}"
-  with_items: "{{ rabbitmq_users_list }}"
+  no_log: true
+  run_once: true
+  with_items: "{{ rabbitmq_users_list if (rabbitmq_users | length > 0) else rabbitmq_users_default }}"
