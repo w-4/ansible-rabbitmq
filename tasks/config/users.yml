@@ -1,0 +1,27 @@
+---
+- name: Creates rabbitmq_users_list fact
+  set_fact:
+    rabbitmq_users_list: []
+
+- name: Ensure that rabbitmq guest user is removed
+  rabbitmq_user:
+    user: guest
+    state: absent
+
+- name: Combine rabbitmq_users_default with rabbitmq_users
+  set_fact:
+    rabbitmq_users_list: "{{ (rabbitmq_users_list | default([])) + [rabbitmq_users_default | combine(item, recursive=True)] }}"
+  with_items: "{{ rabbitmq_users }}"
+
+- name: Create RabbitMQ users
+  rabbitmq_user:
+    user: "{{ item.user }}"
+    password: "{{ item.password }}"
+    vhost: "{{ item.vhost | default (omit) }}"
+    configure_priv: "{{ item.configure_priv | default('.*') }}"
+    read_priv: "{{ item.read_priv | default('.*') }}"
+    write_priv: "{{ item.write_priv | default('.*') }}"
+    tags: "{{ item.tags | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+    update_password: "{{ item.update_password | default('always') }}"
+  with_items: "{{ rabbitmq_users_list }}"

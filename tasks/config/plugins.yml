@@ -1,0 +1,17 @@
+---
+- name: Enable plugins
+  rabbitmq_plugin:
+    names: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ rabbitmq_plugins }}"
+  become_user: "{{ rabbitmq_owner }}"
+  when: rabbitmq_plugins | length > 0
+  changed_when: false
+
+- name: Force to correct enabled plugins permissions
+  file:
+    path: "{{ rabbitmq_enabled_plugins_file_path }}"
+    owner: "{{ rabbitmq_owner }}"
+    group: "{{ rabbitmq_group }}"
+    mode: "0644"
+  changed_when: false

@@ -1,0 +1,14 @@
+---
+- name: Manage Vhosts
+  rabbitmq_vhost:
+    name: "{{ vhost_item.name }}"
+    tracing: "{{ vhost_item.tracing | default(omit) }}"
+    state: "{{ vhost_item.state | default('present') }}"
+
+- name: Manage Vhosts limit
+  rabbitmq_vhost_limits:
+    vhost: "{{ vhost_item.name }}"
+    max_connections: "{{ vhost_item.max_connections | default(omit) }}"
+    max_queues: "{{ vhost_item.max_queues | default(omit) }}"
+    state: "{{ present if (vhost_item.set_limit is true) else absent }}"
+  when: vhost_item.set_limit is defined

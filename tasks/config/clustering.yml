@@ -3,7 +3,7 @@
   set_fact:
     rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
   run_once: true
-  delegate_to: "{{ ansible_play_hosts[0] }}"
+  delegate_to: "{{ rabbitmq_master_node }}"
   when: rabbitmq_erlang_cookie | lenth > 0
 
 - name: Copy erlang cookie
@@ -25,18 +25,19 @@
 
     - name: Force forget cluster node on 'master'
       command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname }}"
-      delegate_to: "{{ ansible_play_hosts[0] }}"
+      delegate_to: "{{ rabbitmq_master_node }}"
       ignore_errors: true
 
     - name: Join rabbitmq cluster
-      command: rabbitmqctl join_cluster "rabbit@{{ ansible_play_hosts[0] }}"
+      command: rabbitmqctl join_cluster "rabbit@{{ rabbitmq_master_node }}"
       register: cluster_joined
       retries: 2
       delay: 5
+      ignore_errors: true
 
     - name: Start rabbitmq app
       command: rabbitmqctl start_app
-  when: "inventory_hostname != ansible_play_hosts[0]"
+  when: inventory_hostname != rabbitmq_master_node
 
 - name: Set rabbitmq cluster name
   rabbitmq_global_parameter:

@@ -26,34 +26,37 @@ rabbitmq_home_path: /var/lib/rabbitmq/
 rabbitmq_enabled_plugins_file_path: /etc/rabbitmq/enabled_plugins
 rabbitmq_config_file_path: /etc/rabbitmq/rabbitmq.conf
 rabbitmq_env_variables_file_path: /etc/rabbitmq/rabbitmq-env.conf
+rabbitmq_conf_extra_settings:
 
 # Variables can be overriden to adapt to the user case
 rabbitmq_conf_disk_free_limit_mem_relative: 1.5
 rabbitmq_conf_vm_memory_high_watermark: 0.4
 rabbitmq_conf_num_acceptors_tcp: 10
 
-# system number of open files
+# System number of open files
 rabbitmq_service_d_path: /etc/systemd/system/rabbitmq-server.service.d
 rabbitmq_system_number_open_files: 50000
 
 # RabbitMQ users
-rabbitmq_users_remove:
-  - guest
-
-rabbitmq_users:
-  rabbitmq-admin: "{{ lookup('env', 'RABBITMQ_ADMIN_PASSWORD' ) | default('rabbitmq', true) }}"
-
-rabbitmq_conf_extra_settings:
-rabbitmq_administrator_tag: administrator
+rabbitmq_manage_users: true
+rabbitmq_users: []
+rabbitmq_users_default:
+  - user: admin
+    password: rabbitmq
+    tags: administrator
 
 # RabbitMQ plugins
+rabbitmq_manage_plugins: true
 rabbitmq_bin_path: /usr/lib/rabbitmq/bin
 rabbitmq_sbin_path: /usr/lib/rabbitmq/sbin
 rabbitmq_plugins_prefix_path: /usr/lib/rabbitmq
 rabbitmq_plugins:
-  - rabbitmq_management
-  - rabbitmq_shovel
-  - rabbitmq_shovel_management
+  - name: rabbitmq_management
+    state: enabled
+  - name: rabbitmq_shovel
+    state: enabled
+  - name: rabbitmq_shovel_management
+    state: enabled
 
 # RabbitMQ cluster
 rabbitmq_erlang_cookie: ""
@@ -70,6 +73,15 @@ rabbitmq_master_node: "{{ rabbitmq_nodes_list[0] }}"
 # RabbitMQ repositories on satellite or katello
 rabbitmq_repository_on_satellite: []
 
+# RabbitMQ Vhosts
+rabbitmq_manage_vhosts: false
+rabbitmq_vhosts: []
+
+# RabbitMQ Policy
+rabbitmq_manage_policies: false
+rabbitmq_policies: []
+
+# Config Newrelic to monitoring RabbitMQ
 rabbitmq_newrelic_agent_enabled: false
 rabbitmq_newrelic_agent_config_file_path: /etc/newrelic-infra/integrations.d/rabbitmq-config.yml
 rabbitmq_newrelic_command: all
