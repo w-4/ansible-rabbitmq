@@ -36,13 +36,16 @@
     backup: true
   notify: restart rabbitmq
 
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers
+
 - name: Task block to clear new nodes before joining to cluster
   block:
     - name: Stop rabbitmq app
       command: rabbitmqctl stop_app
 
     - name: Reset rabbitmq before entering cluster
-      command: rabbitmqctl reset
+      command: rabbitmqctl force_reset
 
     - name: Force forget cluster node on 'master'
       command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname }}"
