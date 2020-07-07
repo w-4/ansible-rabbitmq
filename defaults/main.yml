@@ -2,6 +2,11 @@
 # Take the package given by the OS/distrib (Debian-like only)
 rabbitmq_os_package: false
 
+# RabbitMQ repositories in katello
+rabbitmq_repository_on_satellite:
+  - Stone_RabbitMQ_erlang_rhel7
+  - Stone_RabbitMQ_38_rhel7
+
 # Always install RabbitMQ,
 # unless it's already installed and you don't want it to be replaced
 rabbitmq_install_enabled: true
@@ -43,17 +48,10 @@ rabbitmq_erlang_cookie: ""
 rabbitmq_clustering_force: false
 rabbitmq_clustering_enabled: false
 rabbitmq_clustering_cluster_name: ""
+rabbitmq_clustering_ha_default: true
 rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
 rabbitmq_nodename_prefix: rabbit
 rabbitmq_nodename: "{{ ansible_fqdn }}"
-
-# RabbitMQ users
-rabbitmq_manage_users: true
-rabbitmq_users: []
-rabbitmq_users_default:
-  - user: admin
-    password: rabbitmq
-    tags: administrator
 
 # RabbitMQ plugins
 rabbitmq_manage_plugins: true
@@ -68,8 +66,13 @@ rabbitmq_plugins:
   - name: rabbitmq_shovel_management
     state: enabled
 
-# RabbitMQ repositories on satellite or katello
-rabbitmq_repository_on_satellite: []
+# RabbitMQ Users
+rabbitmq_manage_users: true
+rabbitmq_users: []
+rabbitmq_users_default:
+  - user: admin
+    password: rabbitmq
+    tags: administrator
 
 # RabbitMQ Vhosts
 rabbitmq_manage_vhosts: false
@@ -80,14 +83,15 @@ rabbitmq_manage_policies: false
 rabbitmq_policies: []
 
 # Config Newrelic to monitoring RabbitMQ
+newrelic_license:
 rabbitmq_newrelic_agent_enabled: false
 rabbitmq_newrelic_agent_config_file_path: /etc/newrelic-infra/integrations.d/rabbitmq-config.yml
 rabbitmq_newrelic_command: all
 rabbitmq_newrelic_hostname: localhost
 rabbitmq_newrelic_port: 15672
 rabbitmq_newrelic_use_ssl: false
-rabbitmq_newrelic_username: monitoring
-rabbitmq_newrelic_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
+rabbitmq_newrelic_username: admin
+rabbitmq_newrelic_password: rabbitmq
 rabbitmq_newrelic_config_path: "{{ rabbitmq_config_file_path }}"
 rabbitmq_newrelic_queues:
 rabbitmq_newrelic_exchanges:

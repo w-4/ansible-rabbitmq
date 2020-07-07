@@ -8,7 +8,9 @@
       ha-mode: all
       ha-sync-mode: automatic
     state: present
-  when: rabbitmq_clustering_enabled
+  when:
+    - rabbitmq_clustering_enabled
+    - rabbitmq_clustering_ha_default
 
 - name: Manage VHost Policies
   rabbitmq_policy:

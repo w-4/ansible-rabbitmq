@@ -61,7 +61,7 @@
       command: rabbitmqctl stop_app
 
     - name: Reset rabbitmq before entering cluster
-      command: rabbitmqctl reset
+      command: rabbitmqctl force_reset
 
     - name: Force forget cluster node on 'master'
       command: "rabbitmqctl forget_cluster_node {{ rabbitmq_node }}"
