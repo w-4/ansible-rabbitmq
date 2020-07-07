@@ -1,9 +1,8 @@
----
 # {{ ansible_managed }}
 integration_name: com.newrelic.rabbitmq
 
 instances:
-  - name: {{ rabbitmq_newrelic_cluster_name | default(inventory_hostname)}}
+  - name: {{ rabbitmq_clustering_cluster_name | default(inventory_hostname, true) }}
     command: {{ rabbitmq_newrelic_command }}
     arguments:
       hostname: localhost
