@@ -4,7 +4,6 @@
     names: "{{ item.name }}"
     state: "{{ item.state }}"
   with_items: "{{ rabbitmq_plugins }}"
-  become_user: "{{ rabbitmq_owner }}"
   when: rabbitmq_plugins | length > 0
   changed_when: false
 
