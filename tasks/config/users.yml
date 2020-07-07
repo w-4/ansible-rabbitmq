@@ -10,8 +10,7 @@
 
 - name: Combine rabbitmq_users_default with rabbitmq_users
   set_fact:
-    rabbitmq_users_list: "{{ (rabbitmq_users_list | default([])) + [rabbitmq_users_default | combine(item, recursive=True)] }}"
-  with_items: "{{ rabbitmq_users }}"
+    rabbitmq_users_list: "{{ rabbitmq_users_default }} + {{ rabbitmq_users }}"
 
 - name: Create RabbitMQ users
   rabbitmq_user:
