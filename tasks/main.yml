@@ -38,6 +38,6 @@
   tags: rabbitmq_policies
 
 - name: Configure new-relic rabbitmq infra agent
-  include_tasks: monitoring-newrelic.yml
+  include_tasks: config/monitoring-newrelic.yml
   when: rabbitmq_newrelic_agent_enabled
   tags: rabbitmq_monitoring
