@@ -1,5 +1,6 @@
 ---
 - name: Converge queue service clustered
   hosts: all
+  become: true
   roles:
-    - role: ansible-rabbitmq
+    - stone-payments.rabbitmq
