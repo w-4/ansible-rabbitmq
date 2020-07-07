@@ -41,6 +41,7 @@ rabbitmq_system_number_open_files: 50000
 rabbitmq_erlang_cookie: ""
 rabbitmq_clustering_enabled: false
 rabbitmq_clustering_cluster_name: ""
+rabbitmq_clustering_HA_default: true
 rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
 rabbitmq_nodename_prefix: rabbit
 rabbitmq_nodename: "{{ ansible_fqdn }}"
