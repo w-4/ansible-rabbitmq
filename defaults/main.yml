@@ -27,6 +27,7 @@ rabbitmq_enabled_plugins_file_path: /etc/rabbitmq/enabled_plugins
 rabbitmq_config_file_path: /etc/rabbitmq/rabbitmq.conf
 rabbitmq_env_variables_file_path: /etc/rabbitmq/rabbitmq-env.conf
 rabbitmq_conf_extra_settings:
+rabbitmq_default_loglevel: warning
 
 # Variables can be overriden to adapt to the user case
 rabbitmq_conf_disk_free_limit_mem_relative: 1.5
@@ -39,6 +40,7 @@ rabbitmq_system_number_open_files: 50000
 
 # RabbitMQ cluster
 rabbitmq_erlang_cookie: ""
+rabbitmq_clustering_force: false
 rabbitmq_clustering_enabled: false
 rabbitmq_clustering_cluster_name: ""
 rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
@@ -91,5 +93,5 @@ rabbitmq_newrelic_queues:
 rabbitmq_newrelic_exchanges:
 rabbitmq_newrelic_vhosts:
 rabbitmq_newrelic_labels:
-  env: test
-  role: rabbitmq
+  env: ""
+  role: ""
