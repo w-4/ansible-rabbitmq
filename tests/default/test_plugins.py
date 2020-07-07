@@ -17,5 +17,5 @@ def test_rabbitmq_sbin_is_present(host):
 
 
 def test_rabbitmq_management_plugin_is_enable(host):
-    list_plugins_command = host.run("sudo rabbitmq-plugins list -E -m")
+    list_plugins_command = host.run("rabbitmq-plugins list -e -m")
     assert 'rabbitmq_management' in list_plugins_command.stdout
