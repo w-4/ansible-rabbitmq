@@ -17,7 +17,7 @@
       key: "{{ cluster_group_name }}"
 
   - debug:
-      var: groups[cluster_group_name]
+      msg: "{{ groups[cluster_group_name] }}"
       verbosity: 2
 
   - name: Set random erlang cookie
