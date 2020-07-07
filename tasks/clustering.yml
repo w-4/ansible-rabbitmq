@@ -18,6 +18,7 @@
 
   - debug:
       var: groups[cluster_group_name]
+      verbosity: 2
 
   - name: Set random erlang cookie
     set_fact:
@@ -36,27 +37,28 @@
       backup: true
     notify: restart rabbitmq
 
-  - block:
-    - name: Stop rabbitmq app
-      command: rabbitmqctl stop_app
+  - name: Task block to clear new nodes before joining to cluster
+    block:
+      - name: Stop rabbitmq app
+        command: rabbitmqctl stop_app
 
-    - name: Reset rabbitmq before entering cluster
-      command: rabbitmqctl reset
+      - name: Reset rabbitmq before entering cluster
+        command: rabbitmqctl reset
 
-    - name: Force forget cluster node on 'master'
-      command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname }}"
-      delegate_to: "{{ groups[cluster_group_name][0] }}"
-      ignore_errors: True
+      - name: Force forget cluster node on 'master'
+        command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname }}"
+        delegate_to: "{{ groups[cluster_group_name][0] }}"
+        ignore_errors: True
 
-    - name: Join rabbitmq cluster
-      command: rabbitmqctl join_cluster "rabbit@{{ groups[cluster_group_name][0] }}"
-      register: cluster_joined
-      retries: 2
-      delay: 5
+      - name: Join rabbitmq cluster
+        command: rabbitmqctl join_cluster "rabbit@{{ groups[cluster_group_name][0] }}"
+        register: cluster_joined
+        retries: 2
+        delay: 5
 
-    - name: Start rabbitmq app
-      command: rabbitmqctl start_app
-  when: "inventory_hostname != groups[cluster_group_name][0]"
+      - name: Start rabbitmq app
+        command: rabbitmqctl start_app
+      when: "inventory_hostname != groups[cluster_group_name][0]"
 
   - name: Set rabbitmq cluster name
     rabbitmq_global_parameter:
