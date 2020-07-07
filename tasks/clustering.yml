@@ -58,7 +58,7 @@
 
       - name: Start rabbitmq app
         command: rabbitmqctl start_app
-      when: "inventory_hostname != groups[cluster_group_name][0]"
+    when: "inventory_hostname != groups[cluster_group_name][0]"
 
   - name: Set rabbitmq cluster name
     rabbitmq_global_parameter:
