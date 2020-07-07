@@ -14,7 +14,7 @@
   group_by:
     key: "{{ cluster_group_name }}"
 
-- name: Show the name of frist node 
+- name: Show the name of first node
   debug:
     msg: "{{ groups[cluster_group_name][0] }}"
     verbosity: 2
