@@ -11,6 +11,7 @@
   when:
     - rabbitmq_clustering_enabled
     - rabbitmq_clustering_ha_default
+  run_once: true
 
 - name: Manage VHost Policies
   rabbitmq_policy:
@@ -23,3 +24,4 @@
     state: "{{ item.state | default('present') }}"
   with_items: "{{ rabbitmq_policies }}"
   when: rabbitmq_manage_policies
+  run_once: true
