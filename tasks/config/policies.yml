@@ -14,12 +14,12 @@
 
 - name: Manage VHost Policies
   rabbitmq_policy:
-    name: "pol-{{ item.name }}"
-    vhost: "{{ item.vhost }}"
-    pattern: "{{ item.pattern }}"
-    apply_to: "{{ item.apply_to | default(omit) }}"
-    priority: "{{ item.priority | default(omit) }}"
-    tags: "{{ item.tags | default(omit) }}"
-    state: "{{ item.state | default('present') }}"
-  with_items: "{{ rabbitmq_policies }}"
+    name: "pol-{{ item.key }}"
+    vhost: "{{ item.value.vhost }}"
+    pattern: "{{ item.value.pattern }}"
+    tags: "{{ item.value.tags }}"
+    apply_to: "{{ item.value.apply_to | default(omit) }}"
+    priority: "{{ item.value.priority | default(omit) }}"
+    state: "{{ item.value.state | default('present') }}"
+  with_dict: "{{ rabbitmq_policies }}"
   when: rabbitmq_manage_policies

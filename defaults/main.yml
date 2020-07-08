@@ -69,19 +69,19 @@ rabbitmq_plugins:
 
 # RabbitMQ Users
 rabbitmq_manage_users: true
-rabbitmq_users: []
+rabbitmq_users: {}
 rabbitmq_users_default:
-  - user: admin
+  admin:
     password: rabbitmq
     tags: administrator
 
 # RabbitMQ Vhosts
 rabbitmq_manage_vhosts: false
-rabbitmq_vhosts: []
+rabbitmq_vhosts: {}
 
 # RabbitMQ Policy
 rabbitmq_manage_policies: false
-rabbitmq_policies: []
+rabbitmq_policies: {}
 
 # Config Newrelic to monitoring RabbitMQ
 newrelic_license:

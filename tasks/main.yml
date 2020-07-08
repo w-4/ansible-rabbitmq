@@ -23,7 +23,7 @@
 - name: Tasks to manage RabbitMQ Vhosts
   include_tasks: config/vhosts.yml
   when: rabbitmq_manage_vhosts
-  with_items: "{{ rabbitmq_vhosts }}"
+  with_items: "{{ rabbitmq_vhosts | dict2items }}"
   loop_control:
     loop_var: vhost_item
   tags: rabbitmq_vhosts
