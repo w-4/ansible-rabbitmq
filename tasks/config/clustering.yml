@@ -71,3 +71,4 @@
     name: cluster_name
     value: "{{ rabbitmq_clustering_cluster_name | to_json }}"
     state: present
+  run_once: true
