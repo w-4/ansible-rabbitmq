@@ -157,7 +157,7 @@ By default this role will install the currently last upstream version of RabbitM
         rabbitmq_patch: 5
 ```
 
-By default the role will try the configure the NODENAME with `rabbit@{{ inventory_hostname }}` when clustering is enabled, if you want to customize the node name, you can substitute the NODENAME with the variables `rabbitmq_nodename_prefix`.
+By default the role will try the configure the NODENAME with `rabbit@{{ ansible_nodename }}` when clustering is enabled, if you want to customize the node name, you can substitute the NODENAME with the variables `rabbitmq_nodename_prefix`.
 
 Others specific RabbitMQ environment variables can also be given.
 

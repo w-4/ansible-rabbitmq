@@ -15,7 +15,7 @@
 - name: Set dynamic group based on cluster_name
   group_by:
     key: "{{ cluster_group_name }}"
-  delegate_to: localhost
+  run_once: true
 
 - name: Show the name of master node
   debug:
@@ -77,9 +77,9 @@
     - name: Start rabbitmq app
       command: rabbitmqctl start_app
   vars:
-    rabbitmq_node: "rabbit@{{ inventory_hostname }}"
+    rabbitmq_node: "rabbit@{{ ansible_nodename }}"
   when:
-    - inventory_hostname != groups[cluster_group_name][0]
+    - ansible_nodename != groups[cluster_group_name][0]
     - (rabbitmq_node not in rabbitmq_cluster_status['running_nodes']) or (rabbitmq_clustering_force)
 
 - name: Set rabbitmq cluster name
