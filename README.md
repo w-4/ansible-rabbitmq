@@ -64,6 +64,8 @@ For RedHat machines make sure the machines are subscribed. Also, this role requi
   rabbitmq_env_variables_file_path: /etc/rabbitmq/rabbitmq-env.conf
   rabbitmq_conf_extra_settings:
   rabbitmq_default_loglevel: warning
+  rabbitmq_erlang_cookie: ""
+  rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
 
   # Variables can be overriden to adapt to the user case
   rabbitmq_conf_disk_free_limit_mem_relative: 1.5
@@ -75,12 +77,10 @@ For RedHat machines make sure the machines are subscribed. Also, this role requi
   rabbitmq_system_number_open_files: 50000
 
   # RabbitMQ cluster
-  rabbitmq_erlang_cookie: ""
   rabbitmq_clustering_force: false
   rabbitmq_clustering_enabled: false
   rabbitmq_clustering_cluster_name: ""
   rabbitmq_clustering_ha_default: true
-  rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
   rabbitmq_nodename_prefix: rabbit
   rabbitmq_nodename: "{{ ansible_fqdn }}"
 
@@ -99,19 +99,30 @@ For RedHat machines make sure the machines are subscribed. Also, this role requi
 
   # RabbitMQ Users
   rabbitmq_manage_users: true
-  rabbitmq_users: []
+  rabbitmq_users: {}  # The same format of the rabbitmq_users_default variable
   rabbitmq_users_default:
-    - user: admin
+    admin:
       password: rabbitmq
       tags: administrator
 
   # RabbitMQ Vhosts
-  rabbitmq_manage_vhosts: false
-  rabbitmq_vhosts: []
+  rabbitmq_manage_vhosts: false  # (true | false) to manage VHosts
+  rabbitmq_vhosts:
+    name_of_vhost:
+      state: present
+      set_limit: true  # (Optional) Set this to configue vhost limits
+      max_connections: 0
+      max_queues: 0
 
   # RabbitMQ Policy
-  rabbitmq_manage_policies: false
-  rabbitmq_policies: []
+  rabbitmq_manage_policies: false # (true | false) to manage Policy
+  rabbitmq_policies:
+    name_of_policy:
+      vhost: ""
+      pattern: ".*"
+      tags:
+        ha-mode: ""
+        ha-sync-mode: ""
 
   # Config Newrelic to monitoring RabbitMQ
   newrelic_license:
