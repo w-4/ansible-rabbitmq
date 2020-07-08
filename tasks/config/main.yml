@@ -72,7 +72,7 @@
       notify:
         - daemon reload
         - restart rabbitmq
-  when: rabbitmq_system_number_open_files == 500000
+  when: rabbitmq_system_number_open_files > 1024
 
 - name: Symlink rabbitmq bin to sbin
   file:
