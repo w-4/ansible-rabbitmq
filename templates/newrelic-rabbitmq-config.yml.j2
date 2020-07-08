@@ -2,7 +2,7 @@
 integration_name: com.newrelic.rabbitmq
 
 instances:
-  - name: {{ rabbitmq_clustering_cluster_name | default(inventory_hostname, true) }}
+  - name: {{ rabbitmq_clustering_cluster_name | default(ansible_nodename, true) }}
     command: {{ rabbitmq_newrelic_command }}
     arguments:
       hostname: localhost
