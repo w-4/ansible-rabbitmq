@@ -11,6 +11,7 @@
   with_items: "{{ rabbitmq_plugins }}"
   when:
     - rabbitmq_plugins | length > 0
+    - rabbitmq_installed_plugins.stdout_lines is defined
     - item.name not in rabbitmq_installed_plugins.stdout_lines
 
 - name: Force to correct enabled plugins permissions
