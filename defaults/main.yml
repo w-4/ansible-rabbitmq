@@ -33,6 +33,9 @@ rabbitmq_config_file_path: /etc/rabbitmq/rabbitmq.conf
 rabbitmq_env_variables_file_path: /etc/rabbitmq/rabbitmq-env.conf
 rabbitmq_conf_extra_settings:
 rabbitmq_default_loglevel: warning
+rabbitmq_erlang_cookie: ""
+rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
+
 
 # Variables can be overriden to adapt to the user case
 rabbitmq_conf_disk_free_limit_mem_relative: 1.5
@@ -44,12 +47,10 @@ rabbitmq_service_d_path: /etc/systemd/system/rabbitmq-server.service.d
 rabbitmq_system_number_open_files: 50000
 
 # RabbitMQ cluster
-rabbitmq_erlang_cookie: ""
 rabbitmq_clustering_force: false
 rabbitmq_clustering_enabled: false
 rabbitmq_clustering_cluster_name: ""
 rabbitmq_clustering_ha_default: true
-rabbitmq_erlang_cookie_file_path: "{{ rabbitmq_home_path }}.erlang.cookie"
 rabbitmq_nodename_prefix: rabbit
 rabbitmq_nodename: "{{ ansible_fqdn }}"
 
