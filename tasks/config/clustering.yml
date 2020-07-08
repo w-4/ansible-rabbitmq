@@ -46,13 +46,18 @@
     - name: Force forget cluster node on 'master'
       command: "rabbitmqctl forget_cluster_node {{ rabbitmq_node }}"
       delegate_to: "{{ groups[cluster_group_name][0] }}"
-      ignore_errors: true
+      when:
+        - (rabbitmq_node in rabbitmq_cluster_status['running_nodes'])
+
+    - name: Waiting for a while to nodes stabilize themselves
+      wait_for:
+        timeout: 15
 
     - name: Join rabbitmq cluster
       command: rabbitmqctl join_cluster "rabbit@{{ groups[cluster_group_name][0] }}"
       register: cluster_joined
-      retries: 2
-      delay: 5
+      retries: 3
+      delay: 15
 
     - name: Start rabbitmq app
       command: rabbitmqctl start_app
