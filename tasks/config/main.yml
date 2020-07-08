@@ -80,39 +80,34 @@
     dest: "{{ rabbitmq_sbin_path }}"
     state: link
 
-- name: Create erlang cookie file at {{ rabbitmq_erlang_cookie_file_path }}
+- name: Create erlang cookie file at {{ rabbitmq_erlang_cookie_file_path }} if it is undefined
   block:
-    - name: Define erlang cookie if it is undefined
-      block:
-        - name: Try to read erlang cookie from a member of the cluster
-          slurp:
-            src: "{{ rabbitmq_erlang_cookie_file_path }}"
-          register: tmp_erlang_cookie_data
-          run_once: true
-          become_user: "{{ rabbitmq_owner }}"
+    - name: Try to read erlang cookie from a member of the cluster
+      slurp:
+        src: "{{ rabbitmq_erlang_cookie_file_path }}"
+      register: tmp_erlang_cookie_data
+      become_user: "{{ rabbitmq_owner }}"
 
-        - name: Try to set a fact based on previous slurp task
-          set_fact:
-            rabbitmq_erlang_cookie: "{{ tmp_erlang_cookie_data['content'] | b64decode | default(omit, true)}}"
-          run_once: true
-          failed_when: (rabbitmq_erlang_cookie is undefined) or (rabbitmq_erlang_cookie | default(None, true) == None)
+    - name: Try to set a fact based on previous slurp task
+      set_fact:
+        rabbitmq_erlang_cookie: "{{ tmp_erlang_cookie_data['content'] | b64decode | default(omit, true)}}"
+      failed_when: (rabbitmq_erlang_cookie is undefined) or (rabbitmq_erlang_cookie | default(None, true) == None)
+  rescue:
+    - name: Set random erlang cookie if it is still undefined
+      set_fact:
+        rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
+  when: (rabbitmq_erlang_cookie is undefined) or (rabbitmq_erlang_cookie | default(None, true) == None)
+  run_once: true
 
-      rescue:
-        - name: Set random erlang cookie if it is still undefined
-          set_fact:
-            rabbitmq_erlang_cookie: "{{ lookup('password', '/dev/null length=15 chars=ascii_uppercase,digits') }}"
-          run_once: true
-      when: (rabbitmq_erlang_cookie is undefined) or (rabbitmq_erlang_cookie | default(None, true) == None)
-
-    - name: Copy erlang cookie
-      template:
-        src: erlang.cookie.j2
-        dest: "{{ rabbitmq_erlang_cookie_file_path }}"
-        owner: rabbitmq
-        group: rabbitmq
-        mode: "0400"
-        backup: true
-      notify: restart rabbitmq
+- name: Copy erlang cookie
+  template:
+    src: erlang.cookie.j2
+    dest: "{{ rabbitmq_erlang_cookie_file_path }}"
+    owner: rabbitmq
+    group: rabbitmq
+    mode: "0400"
+    backup: true
+  notify: restart rabbitmq
 
 - name: Force all notified handlers to run at this point, not waiting for normal sync points
   meta: flush_handlers
