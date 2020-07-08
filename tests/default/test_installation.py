@@ -7,8 +7,16 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 def test_rabbitmq_is_installed(host):
     rabbitmq = host.package("rabbitmq-server")
+    ansible_vars = host.ansible.get_variables()
+
+    rabbitmq_version = "{}.{}.{}".format(
+        ansible_vars['rabbitmq_major'],
+        ansible_vars['rabbitmq_minor'],
+        ansible_vars['rabbitmq_patch']
+    )
+
     assert rabbitmq.is_installed
-    assert rabbitmq.version.startswith("3.6.9")
+    assert rabbitmq.version.startswith(rabbitmq_version)
 
 
 def test_earlang_is_installed(host):

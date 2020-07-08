@@ -17,5 +17,13 @@ def test_rabbitmq_sbin_is_present(host):
 
 
 def test_rabbitmq_management_plugin_is_enable(host):
-    list_plugins_command = host.run("rabbitmq-plugins list -e -m")
+    ansible_vars = host.ansible.get_variables()
+    rabbitmq_plugins_list_cmd = "rabbitmq-plugins list -e -m"
+
+    if (ansible_vars['rabbitmq_clustering_enabled']):
+        with host.sudo():
+            list_plugins_command = host.run(rabbitmq_plugins_list_cmd)
+    else:
+        list_plugins_command = host.run(rabbitmq_plugins_list_cmd)
+
     assert 'rabbitmq_management' in list_plugins_command.stdout

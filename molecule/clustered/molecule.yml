@@ -57,6 +57,9 @@ provisioner:
         rabbitmq_clustering_enabled: true
         rabbitmq_repository_on_satellite: []
         rabbitmq_clustering_cluster_name: rabbitmq
+        rabbitmq_erlang_cookie: A3F8POT34XPQ32K
+        rabbitmq_conf_env:
+          USE_LONGNAME: false
 scenario:
   name: clustered
 verifier:

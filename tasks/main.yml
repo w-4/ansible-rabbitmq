@@ -27,15 +27,18 @@
   loop_control:
     loop_var: vhost_item
   tags: rabbitmq_vhosts
+  run_once: true
 
 - name: Tasks to manage RabbitMQ Users
   include_tasks: config/users.yml
   when: rabbitmq_manage_users
   tags: rabbitmq_users
+  run_once: true
 
 - name: Tasks to manage RabbitMQ Policies
   include_tasks: config/policies.yml
   tags: rabbitmq_policies
+  run_once: true
 
 - name: Configure new-relic rabbitmq infra agent
   include_tasks: config/monitoring-newrelic.yml
