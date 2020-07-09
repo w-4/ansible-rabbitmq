@@ -99,7 +99,10 @@ For RedHat machines make sure the machines are subscribed. Also, this role requi
 
   # RabbitMQ Users
   rabbitmq_manage_users: true
-  rabbitmq_users: {}  # The same format of the rabbitmq_users_default variable
+
+  # The same format of the rabbitmq_users_default variable.
+  # The management UI requires authentication and authorisation. For more details see: https://www.rabbitmq.com/management.html#permissions
+  rabbitmq_users: {}
   rabbitmq_users_default:
     admin:
       password: rabbitmq
