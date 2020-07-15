@@ -1,32 +1,46 @@
 ---
-- block:
-  - name: install RabbitMQ (RedHat)
-    include: install.redhat.yml
-    when: ansible_os_family == 'RedHat'
-  - name: install RabbitMQ (Debian)
-    include: install.debian.yml
-    when: ansible_distribution == 'Debian'
-  - name: install RabbitMQ (Ubuntu)
-    include: install.ubuntu.yml
-    when: ansible_distribution == 'Ubuntu'
+- name: Install RabbitMQ on {{ ansible_distribution }}
+  include_tasks: "install/{{ rabbitmq_install_task }}"
   when: rabbitmq_install_enabled
+  vars:
+    rabbitmq_install_task: "{{ (ansible_os_family | lower) if (ansible_os_family == 'RedHat') else (ansible_distribution | lower) }}.yml"
   tags: rabbitmq_install
 
-- name: configure queue service
-  include: configuration.yml
+- name: Tasks to configure RabbitMQ service
+  include_tasks: config/main.yml
   tags: rabbitmq_configuration
 
-- name: install plugins
-  include: plugins.yml
+- name: Install plugins tasks
+  include_tasks: config/plugins.yml
+  when: rabbitmq_manage_plugins
   tags: rabbitmq_plugins
 
-- name: ensure rabbitmq server is running
-  service:
-    name: rabbitmq-server
-    state: restarted
-  changed_when: false
-
-- name: configure cluster
-  include: clustering.yml
+- name: Configure cluster
+  include_tasks: config/clustering.yml
   when: rabbitmq_clustering_enabled
   tags: rabbitmq_clustering
+
+- name: Tasks to manage RabbitMQ Vhosts
+  include_tasks: config/vhosts.yml
+  when: rabbitmq_manage_vhosts
+  with_items: "{{ rabbitmq_vhosts | dict2items }}"
+  loop_control:
+    loop_var: vhost_item
+  tags: rabbitmq_vhosts
+  run_once: true
+
+- name: Tasks to manage RabbitMQ Users
+  include_tasks: config/users.yml
+  when: rabbitmq_manage_users
+  tags: rabbitmq_users
+  run_once: true
+
+- name: Tasks to manage RabbitMQ Policies
+  include_tasks: config/policies.yml
+  tags: rabbitmq_policies
+  run_once: true
+
+- name: Configure new-relic rabbitmq infra agent
+  include_tasks: config/monitoring-newrelic.yml
+  when: rabbitmq_newrelic_agent_enabled
+  tags: rabbitmq_monitoring
