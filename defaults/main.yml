@@ -76,7 +76,6 @@ rabbitmq_users_default:
     tags: administrator
 
 # RabbitMQ Rest API Login Credentials
-
 rabbitmq_api_login_credentials: {}
 
 # RabbitMQ Queues
