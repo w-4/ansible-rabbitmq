@@ -29,6 +29,12 @@
   tags: rabbitmq_vhosts
   run_once: true
 
+- name: Tasks to manage RabbitMQ Queues
+  include_tasks: config/queues.yml
+  when: rabbitmq_manage_queues
+  tags: rabbitmq_queues
+  run_once: true
+
 - name: Tasks to manage RabbitMQ Users
   include_tasks: config/users.yml
   when: rabbitmq_manage_users
