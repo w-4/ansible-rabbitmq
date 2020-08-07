@@ -1,0 +1,14 @@
+---
+- name: Manage Queues
+  rabbitmq_queue:
+    login_user: "{{ item.login_user | default(rabbitmq_api_login_credentials['login_user'] | default(omit)) }}"
+    login_password: "{{ item.login_password | default(rabbitmq_api_login_credentials['login_password'] | default(omit)) }}"
+    login_host: "{{ item.login_host | default(rabbitmq_api_login_credentials['login_host'] | default(omit)) }}"
+    login_port: "{{ item.login_port | default(rabbitmq_api_login_credentials['login_port'] | default(omit)) }}"
+    vhost: "{{ item.vhost | default(omit) }}"
+    name: "{{ item.queue_name }}"
+    durable: "{{ item.durable | default(omit) }}"
+    auto_delete: "{{ item.auto_delete | default(omit) }}"
+    auto_expires: "{{ item.auto_expires | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
+  with_items: "{{ rabbitmq_queues_definitions }}"
