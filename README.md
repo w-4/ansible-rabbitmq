@@ -117,25 +117,23 @@ For RedHat machines make sure the machines are subscribed. Also, this role requi
       max_connections: 0
       max_queues: 0
 
+  # RabbitMQ Rest API Login Credentials
+  rabbitmq_api_login_credentials:
+    login_host: # RabbitMQ Rest API host
+    login_port: # RabbitMQ Rest API port
+    login_user: # RabbitMQ Rest API user
+    login_password: # RabbitMQ Rest API user password
+
   # RabbitMQ Queues
-  ## To manage RabbitMQ Queues you need use Rest Api
-  - hosts: localhost
-    connection: local
-    roles:
-      - role: stone-payments.rabbitmq
-        rabbitmq_manage_queues: true  # (true | false) to manage Queues
-        rabbitmq_api_login_credentials:
-          login_host: # RabbitMQ vip endpoint
-          login_port: # RabbitMQ vip port
-          login_user: # RabbitMQ api user
-          login_password: # RabbitMQ api user password
-        rabbitmq_queues_definitions:
-          - queue_name:
-            vhost: # (Optional) Set this to configue vhost for queue
-            state: present
-            durable: # (Optional) Set this to configue hether queue is durable or not
-            auto_delete: # (Optional) Set this to configue if the queue should delete itself after all queues/queues unbound from it
-            auto_expires: # (Optional) How long a queue can be unused before it is automatically deleted (milliseconds)
+  ## To manage RabbitMQ Queues you need use Rest Api Login Credentials
+  rabbitmq_manage_queues: true  # (true | false) to manage Queues
+  rabbitmq_queues:
+    - queue_name:
+      vhost: # (Optional) Set this to configue vhost for queue
+      state: present
+      durable: # (Optional) Set this to configue hether queue is durable or not
+      auto_delete: # (Optional) Set this to configue if the queue should delete itself after all queues/queues unbound from it
+      auto_expires: # (Optional) How long a queue can be unused before it is automatically deleted (milliseconds)
 
   # RabbitMQ Policy
   rabbitmq_manage_policies: false # (true | false) to manage Policy
