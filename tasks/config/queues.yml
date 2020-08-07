@@ -11,4 +11,4 @@
     auto_delete: "{{ item.auto_delete | default(omit) }}"
     auto_expires: "{{ item.auto_expires | default(omit) }}"
     state: "{{ item.state | default(omit) }}"
-  with_items: "{{ rabbitmq_queues_definitions }}"
+  with_items: "{{ rabbitmq_queues }}"
