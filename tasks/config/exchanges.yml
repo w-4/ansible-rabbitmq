@@ -1,0 +1,12 @@
+---
+- name: Manage Exchanges
+  rabbitmq_exchange:
+    login_user: "{{ item.login_user | default(rabbitmq_api_login_credentials['login_user'] | default(omit)) }}"
+    login_password: "{{ item.login_password | default(rabbitmq_api_login_credentials['login_password'] | default(omit)) }}"
+    login_host: "{{ item.login_host | default(rabbitmq_api_login_credentials['login_host'] | default(omit)) }}"
+    login_port: "{{ item.login_port | default(rabbitmq_api_login_credentials['login_port'] | default(omit)) }}"
+    vhost: "{{ item.vhost | default(omit) }}"
+    name: "{{ item.exchange_name }}"
+    type: "{{ item.type | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
+  with_items: "{{ rabbitmq_exchanges }}"
