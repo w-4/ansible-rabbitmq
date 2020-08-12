@@ -80,11 +80,11 @@ rabbitmq_api_login_credentials: {}
 
 # RabbitMQ Queues
 rabbitmq_manage_queues: false
-rabbitmq_queues: []
+rabbitmq_queues: {}
 
 # RabbitMQ Exchanges
 rabbitmq_manage_exchanges: false
-rabbitmq_exchanges: []
+rabbitmq_exchanges: {}
 
 # RabbitMQ Vhosts
 rabbitmq_manage_vhosts: false
