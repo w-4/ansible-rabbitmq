@@ -133,19 +133,19 @@ For RedHat machines make sure the machines are subscribed. Also, this role requi
   ## For more parameters see the official ansible documentation for this module at https://docs.ansible.com/ansible/latest/modules/rabbitmq_queue_module.html
   rabbitmq_manage_queues: false  # (true | false) to manage Queues
   rabbitmq_queues:
-      name_of_queue:
-        vhost: # (Optional) Set this to configue vhost for queue. The default value is "/".
-        state: present
+    name_of_queue:
+      vhost: # (Optional) Set this to configue vhost for queue. The default value is "/".
+      state: present
 
   # RabbitMQ Exchanges
   ## To manage RabbitMQ Exchanges you need use Rest Api Login Credentials
   rabbitmq_manage_exchanges: false  # (true | false) to manage Exchanges
   ## For more parameters see the official ansible documentation for this module at https://docs.ansible.com/ansible/latest/modules/rabbitmq_exchange_module.html
   rabbitmq_exchanges:
-      name_of_exchange:
-        vhost: # (Optional) Set this to configue vhost for exchange. The default value is "/".
-        type: # (Optional) Set this to configue type for exchange. The default value is "direct".
-        state: present
+    name_of_exchange:
+      vhost: # (Optional) Set this to configue vhost for exchange. The default value is "/".
+      type: # (Optional) Set this to configue type for exchange. The default value is "direct".
+      state: present
 
   # RabbitMQ Policy
   rabbitmq_manage_policies: false # (true | false) to manage Policy
