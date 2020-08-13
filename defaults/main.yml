@@ -86,6 +86,10 @@ rabbitmq_queues: {}
 rabbitmq_manage_exchanges: false
 rabbitmq_exchanges: {}
 
+# RabbitMQ Bindings
+rabbitmq_manage_bindings: false
+rabbitmq_bindings: {}
+
 # RabbitMQ Vhosts
 rabbitmq_manage_vhosts: false
 rabbitmq_vhosts: {}
