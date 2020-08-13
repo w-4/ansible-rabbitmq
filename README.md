@@ -147,6 +147,18 @@ For RedHat machines make sure the machines are subscribed. Also, this role requi
       type: # (Optional) Set this to configue type for exchange. The default value is "direct".
       state: present
 
+  # RabbitMQ Bindings
+  ## To manage RabbitMQ Bindings you need use Rest Api Login Credentials
+  rabbitmq_manage_bindings: false  # (true | false) to manage Bindings
+  ## For more parameters see the official ansible documentation for this module at https://docs.ansible.com/ansible/latest/modules/rabbitmq_binding_module.html
+  rabbitmq_bindings:
+    name_of_source_exchange_binding:
+      vhost: # (Optional) Set this to configue vhost for binding. The default value is "/".
+      type: # (Mandatory) Set this to configue type for binding.
+      destination: # (Mandatory) Set the destination exchange or queue for the binding.
+      routing_key: # (Optional) Set this to configue routing key for the binding.. The default value is "#".
+      state: present
+
   # RabbitMQ Policy
   rabbitmq_manage_policies: false # (true | false) to manage Policy
   rabbitmq_policies:
