@@ -29,6 +29,33 @@
   tags: rabbitmq_vhosts
   run_once: true
 
+- name: Tasks to manage RabbitMQ Queues
+  include_tasks: config/queues.yml
+  when: rabbitmq_manage_queues
+  with_items: "{{ rabbitmq_queues | dict2items }}"
+  loop_control:
+    loop_var: queue_item
+  tags: rabbitmq_queues
+  run_once: true
+
+- name: Tasks to manage RabbitMQ Exchanges
+  include_tasks: config/exchanges.yml
+  when: rabbitmq_manage_exchanges
+  with_items: "{{ rabbitmq_exchanges | dict2items }}"
+  loop_control:
+    loop_var: exchange_item
+  tags: rabbitmq_exchanges
+  run_once: true
+
+- name: Tasks to manage RabbitMQ Bindings
+  include_tasks: config/bindings.yml
+  when: rabbitmq_manage_bindings
+  with_items: "{{ rabbitmq_bindings | dict2items }}"
+  loop_control:
+    loop_var: binding_item
+  tags: rabbitmq_bindings
+  run_once: true
+
 - name: Tasks to manage RabbitMQ Users
   include_tasks: config/users.yml
   when: rabbitmq_manage_users

@@ -117,6 +117,48 @@ For RedHat machines make sure the machines are subscribed. Also, this role requi
       max_connections: 0
       max_queues: 0
 
+  # RabbitMQ Rest API Login Credentials
+  rabbitmq_api_login_credentials:
+    login_host: # (Mandatory) RabbitMQ Rest API host
+    login_port: # (Optional) RabbitMQ Rest API port. The default value is "15672".
+    login_protocol: # (Optional) RabbitMQ Rest API port. The default value is "http".
+    login_user: # (Optional) RabbitMQ Rest API user. The default value is "guest".
+    login_password: # (Mandatory) RabbitMQ Rest API user password
+    ca_cert: # (Optional) CA certificate to verify SSL connection to management API.
+    client_cert: # (Optional) Client certificate to send on SSL connections to management API.
+    client_key: # (Optional) Private key matching the client certificate.
+
+  # RabbitMQ Queues
+  ## To manage RabbitMQ Queues you need use Rest Api Login Credentials
+  ## For more parameters see the official ansible documentation for this module at https://docs.ansible.com/ansible/latest/modules/rabbitmq_queue_module.html
+  rabbitmq_manage_queues: false  # (true | false) to manage Queues
+  rabbitmq_queues:
+    name_of_queue:
+      vhost: # (Optional) Set this to configue vhost for queue. The default value is "/".
+      state: present
+
+  # RabbitMQ Exchanges
+  ## To manage RabbitMQ Exchanges you need use Rest Api Login Credentials
+  rabbitmq_manage_exchanges: false  # (true | false) to manage Exchanges
+  ## For more parameters see the official ansible documentation for this module at https://docs.ansible.com/ansible/latest/modules/rabbitmq_exchange_module.html
+  rabbitmq_exchanges:
+    name_of_exchange:
+      vhost: # (Optional) Set this to configue vhost for exchange. The default value is "/".
+      type: # (Optional) Set this to configue type for exchange. The default value is "direct".
+      state: present
+
+  # RabbitMQ Bindings
+  ## To manage RabbitMQ Bindings you need use Rest Api Login Credentials
+  rabbitmq_manage_bindings: false  # (true | false) to manage Bindings
+  ## For more parameters see the official ansible documentation for this module at https://docs.ansible.com/ansible/latest/modules/rabbitmq_binding_module.html
+  rabbitmq_bindings:
+    name_of_source_exchange_binding:
+      vhost: # (Optional) Set this to configue vhost for binding. The default value is "/".
+      type: # (Mandatory) Set this to configue type for binding.
+      destination: # (Mandatory) Set the destination exchange or queue for the binding.
+      routing_key: # (Optional) Set this to configue routing key for the binding.. The default value is "#".
+      state: present
+
   # RabbitMQ Policy
   rabbitmq_manage_policies: false # (true | false) to manage Policy
   rabbitmq_policies:
