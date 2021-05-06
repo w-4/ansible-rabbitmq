@@ -25,6 +25,10 @@
     state: present
     force: yes
 
+- name: Update locale
+  command: update-locale LC_ALL=en_US.UTF-8
+  changed_when: false
+
 - name: Ensure rabbitmq server is started and enabled
   service:
     name: rabbitmq-server
@@ -35,7 +39,3 @@
 - name: Ensure rabbitmq app is started so we can interact with rabbit
   command: rabbitmqctl start_app
   when: rabbitmq_service is changed
-
-- name: Update locale
-  command: update-locale LC_ALL=en_US.UTF-8
-  changed_when: false
